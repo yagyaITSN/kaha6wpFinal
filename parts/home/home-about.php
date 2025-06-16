@@ -24,15 +24,14 @@
                      where businesses and customers can connect seamlessly.</p>
                </div>
             </div>
-            <a href="./page-about.php" class="btn btn-custom-red px-4 mt-3">Learn More</a>
+            <a href="<?php echo home_url('/about') ?>" class="btn btn-custom-red px-4 mt-3">Learn More</a>
          </div>
 
          <!-- Image Column -->
          <div class="col-lg-6 text-center">
-            <img src="assets/images/kaha6_about.png" class="img-fluid shadow-sm rounded-1 bg-white"
-               alt="About illustration">
+            <img src="<?php echo get_template_directory_uri(); ?>/assets/images/kaha6_about.png" class="img-fluid shadow-sm rounded-1 bg-white"
+               alt="Kaha6 About Image">
          </div>
-
       </div>
    </div>
 </section>

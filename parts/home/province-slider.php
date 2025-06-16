@@ -4,29 +4,28 @@
       <div class="col-12 col-md-6 col-lg-9">
          <div class="province-section-slider swiper mySwiper">
             <div class="swiper-wrapper my-5">
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/province-no-5/">
-                  <img src="assets/images/5.Lumbini.jpg" alt="Province No 5">
-               </a>
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/sudurpaschim-pradesh/">
-                  <img src="assets/images/7.Sudhurpaschim.png"
-                     alt="Sudurpaschim Pradesh">
-               </a>
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/gandaki-pradesh/">
-                  <img src="assets/images/4.Gandaki-Pradesh.png"
-                     alt="Gandaki Pradesh">
-               </a>
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/karnali-pradesh/">
-                  <img src="assets/images/6.Karnali.jpg" alt="Karnali Pradesh">
-               </a>
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/province-no-1/">
-                  <img src="assets/images/1.koshi.jpg" alt="Province No 1">
-               </a>
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/province-no-2/">
-                  <img src="assets/images/2.Madhesh Pradesh.png" alt="Province No 2">
-               </a>
-               <a class="swiper-slide p-2" href="https://kaha6.com/loc/province-no-3/">
-                  <img src="assets/images/3.Bagmati.png" alt="Province No 3">
-               </a>
+               <?php
+               $terms = get_terms(array(
+                  'taxonomy' => 'ait-locations',
+                  'hide_empty' => false,
+                  'parent'   => 0
+               ));
+
+               foreach ($terms as $term) {
+                  $term_link = get_term_link($term);
+                  $termID = $term->term_id;
+                  $cat_img_key = 'ait-locations_category_' . $termID;
+                  $cat_meta = get_option($cat_img_key);
+                  // $cat_img = $cat_meta['icon'];
+                  $taxonomy_image = get_term_meta($termID, 'taxonomy_image', true);
+
+               ?>
+                  <a class="swiper-slide p-2" href="<?php echo esc_url($term_link); ?>">
+                     <img src="<?php echo esc_url($taxonomy_image); ?>" alt="<?php echo esc_html($term->name); ?>">
+                  </a>
+               <?php
+               }
+               ?>
             </div>
          </div>
       </div>

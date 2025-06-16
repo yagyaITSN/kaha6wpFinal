@@ -5,49 +5,35 @@
 <!-- End Hero Section -->
 
 <!-- Featured Businesses -->
-<?php require 'parts/home/business-slider-one.php';
-
-
-
-
-
-
-
-
-get_template_part('parts/home/business', 'slider-one')
-
-
-
-?>
+<?php get_template_part('parts/home/business', 'slider-one') ?>
 <!-- End Featured Businesses -->
 
 <!-- Banner -->
-<?php require 'ads/home/home-ad-one.php'; ?>
+<?php get_template_part('ads/home/home', 'ad-one'); ?>
 <!-- End Banner -->
 
 <!-- Province Section -->
-<?php require 'parts/home/province-slider.php'; ?>
+<?php get_template_part('parts/home/province', 'slider'); ?>
 <!-- End Province Section -->
 
 <!-- Simple Process -->
-<?php require 'parts/home/process.php'; ?>
+<?php get_template_part('parts/home/process'); ?>
 <!-- End Simple Process -->
 
 <!-- Most visited business -->
-<?php require 'parts/home/business-slider-two.php'; ?>
+<?php get_template_part('parts/home/business', 'slider-two') ?>
 <!-- End Most visited business -->
 
 <!-- Banner -->
-<?php require 'ads/home/home-ad-two.php'; ?>
+<?php get_template_part('ads/home/home', 'ad-two'); ?>
 <!-- End Banner -->
 
 <!-- About -->
-<?php require 'parts/home/home-about.php'; ?>
+<?php get_template_part('parts/home/home', 'about'); ?>
 <!-- End About -->
 
 <!-- Popup -->
-<?php require 'parts/home/modal.php'; ?>
+<?php get_template_part('parts/home/modal'); ?>
 <!-- End Popup -->
-
 
 <?php get_footer(); ?>

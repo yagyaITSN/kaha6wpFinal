@@ -12,12 +12,12 @@
                   <h4 class="fs-4 text-center text-dark mb-4 text-capitalize">Find trusted businesses near you
                      with ease.</h4>
                   <!-- Search Form -->
-                  <?php include 'parts/common/search-form.php' ?>
+                  <?php get_template_part('parts/common/search', 'form'); ?>
                </div>
             </div>
             <div class="modal-footer">
                <!-- Premium Cards -->
-               <?php include 'parts/home/modal-slider.php' ?>
+               <?php get_template_part('parts/home/modal', 'slider'); ?>
                <!-- End Premium Cards -->
             </div>
          </div>
