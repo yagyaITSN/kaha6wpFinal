@@ -10,7 +10,11 @@
 
 <!-- 404 Content -->
 <section>
-    <h1 class="text-center display-1 my-4">404</h1>
+  <div class="container py-5 text-center">
+    <img class="mb-4" src="assets/images/404.png" alt="Kaha6 404 Image" height="550">
+    <p>Sorry, the page you're looking for doesn't exist or has been moved.</p>
+    <a href="<?php echo home_url('/') ?>" class="btn btn-custom-red">Go to Homepage</a>
+  </div>
 </section>
 <!-- End 404 Content -->
 

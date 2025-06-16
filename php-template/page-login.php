@@ -103,7 +103,7 @@
 
                             <div class="switch-login-register mt-3 text-center">
                                 <p>Already have an account? <a href="#" class="d-inline-block text-decoration-none fw-bold"
-                                        id="switchToLogin">Login Here</a></p>
+                                        >Login Here</a></p>
                             </div>
                         </form>
                     </div>
