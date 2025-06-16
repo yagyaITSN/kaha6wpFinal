@@ -33,7 +33,7 @@
 <!-- End About -->
 
 <!-- Popup -->
-<?php get_template_part('parts/home/modal'); ?>
+<?php get_template_part('parts/home/home', 'modal'); ?>
 <!-- End Popup -->
 
 <?php get_footer(); ?>

@@ -76,6 +76,48 @@
 <!-- Swiper Js -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<!-- select2js  -->
+<script>
+  jQuery(document).ready(function($) {
+    $('#business-type').select2({
+      placeholder: 'Business Type',
+      allowClear: true,
+      width: '100%'
+    });
+
+    $('#location').select2({
+      placeholder: 'Location',
+      allowClear: true,
+      width: '100%'
+    });
+  });
+
+  jQuery(document).ready(function($) {
+    $('#homepageModal').on('shown.bs.modal', function() {
+      $('#business-type-unique').select2({
+        placeholder: 'Business Type',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $('#homepageModal')
+      });
+
+      $('#location-unique').select2({
+        placeholder: 'Location',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $('#homepageModal')
+      });
+    });
+
+    $('#homepageModal').on('hidden.bs.modal', function() {
+      $('#business-type-unique').select2('destroy');
+      $('#location-unique').select2('destroy');
+    });
+  });
+</script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script src="<?php echo get_template_directory_uri(); ?>/assets/js/common.js"></script>
 <?php wp_footer(); ?>
 </body>
