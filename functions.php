@@ -284,6 +284,8 @@ function adrotate_custom_register_settings()
 }
 add_action('admin_init', 'adrotate_custom_register_settings');
 
+
+
 // Section callback
 function adrotate_custom_section_callback()
 {

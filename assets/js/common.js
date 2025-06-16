@@ -226,15 +226,18 @@
     }
 
     // Category Page Filter
+   document.addEventListener('DOMContentLoaded', function () {
     function setupCategoryFilter() {
         const businessCardsContainer = document.getElementById('businessCards');
-        if (!businessCardsContainer) return;
-
-        const allCards = Array.from(businessCardsContainer.querySelectorAll('.card'));
         const ratingFilter = document.getElementById('ratingFilter');
         const noResults = document.getElementById('noResults');
 
-        if (!ratingFilter) return;
+        if (!businessCardsContainer || !ratingFilter) {
+            console.warn('Required elements not found: businessCards or ratingFilter');
+            return;
+        }
+
+        const allCards = Array.from(businessCardsContainer.querySelectorAll('.card'));
 
         function applyFilter() {
             const filter = ratingFilter.value;
@@ -242,23 +245,31 @@
 
             if (filter !== 'all') {
                 filteredCards.sort((a, b) => {
-                    const ratingA = parseFloat(a.getAttribute('data-rating'));
-                    const ratingB = parseFloat(b.getAttribute('data-rating'));
+                    const ratingA = parseFloat(a.getAttribute('data-rating')) || 0;
+                    const ratingB = parseFloat(b.getAttribute('data-rating')) || 0;
                     return filter === 'asc' ? ratingA - ratingB : ratingB - ratingA;
                 });
             }
 
+            // Clear container
             businessCardsContainer.innerHTML = '';
+            // Append sorted cards
             filteredCards.forEach(card => businessCardsContainer.appendChild(card));
 
+            // Handle no results (if noResults element exists)
             if (noResults) {
                 noResults.classList.toggle('d-none', filteredCards.length > 0);
             }
         }
 
+        // Attach event listener
         ratingFilter.addEventListener('change', applyFilter);
+        // Initial filter application
         applyFilter();
     }
+
+    setupCategoryFilter();
+});
 
     // Rating and Review System
     (function () {
