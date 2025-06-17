@@ -54,3 +54,25 @@
  .wp_google_login {
    margin: 24px auto 0 !important;
  }
+
+ /* Social Media */
+ .fb-color-code {
+   color: #1877F2 !important;
+ }
+
+ .x-color-code,
+ .tiktok-color-code {
+   color: #000000 !important;
+ }
+
+ .insta-color-code {
+   color: #DC3545 !important;
+ }
+
+ .linkedin-color-code {
+   color: #0077B5 !important;
+ }
+
+ .yt-color-code {
+   color: #FF0000 !important;
+ }

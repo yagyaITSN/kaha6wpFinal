@@ -24,35 +24,36 @@ if (!defined('ABSPATH')) {
 <!-- Comment and Contact Form -->
 
 <div class="comment-form-itsn d-flex align-items-center justify-content-between flex-wrap gap-3">
-   <div class="col-md-6 col-12">
+   <?php if (comments_open()): ?>
+      <div class="col-md-6 col-12">
+         <form action="<?php echo site_url('/wp-comments-post.php'); ?>" method="post" id="commentForm">
+            <?php if (!is_user_logged_in()) : ?>
+               <div class="form-group mb-3">
+                  <label for="name" class="form-label"><?php _e('Name*'); ?></label>
+                  <input type="text" class="form-control" id="name" name="author" required>
+               </div>
+               <div class="form-group mb-3">
+                  <label for="email" class="form-label"><?php _e('Email'); ?></label>
+                  <input type="email" class="form-control" id="email" name="email">
+               </div>
+            <?php endif; ?>
 
-      <form action="<?php echo site_url('/wp-comments-post.php'); ?>" method="post" id="commentForm">
-         <?php if (!is_user_logged_in()) : ?>
             <div class="form-group mb-3">
-               <label for="name" class="form-label"><?php _e('Name*'); ?></label>
-               <input type="text" class="form-control" id="name" name="author" required>
+               <label for="message" class="form-label"><?php _e('Message*'); ?></label>
+               <textarea class="form-control" id="message" name="comment" rows="4" required></textarea>
             </div>
-            <div class="form-group mb-3">
-               <label for="email" class="form-label"><?php _e('Email'); ?></label>
-               <input type="email" class="form-control" id="email" name="email">
-            </div>
-         <?php endif; ?>
 
-         <div class="form-group mb-3">
-            <label for="message" class="form-label"><?php _e('Message*'); ?></label>
-            <textarea class="form-control" id="message" name="comment" rows="4" required></textarea>
-         </div>
+            <?php comment_id_fields(); ?>
+            <?php do_action('comment_form', get_the_ID()); ?>
 
-         <?php comment_id_fields(); ?>
-         <?php do_action('comment_form', get_the_ID()); ?>
+            <button type="submit" class="btn btn-custom-red"><?php _e('Submit'); ?></button>
 
-         <button type="submit" class="btn btn-custom-red"><?php _e('Submit'); ?></button>
-
-         <p class="form-text text-muted mt-2">
-            <?php _e('Your comment will be visible after admin approval.'); ?>
-         </p>
-      </form>
-   </div>
+            <p class="form-text text-muted mt-2">
+               <?php _e('Your comment will be visible after admin approval.'); ?>
+            </p>
+         </form>
+      </div>
+   <?php endif; ?>
 
    <div class="col-12 col-md-6 form-itsn d-flex flex-column justify-content-center gap-3"
       style="max-width: max-content;">
@@ -254,50 +255,3 @@ function custom_comment_callback($comment, $args, $depth)
    endif;
 }
 ?>
-
-<!-- JavaScript to toggle reply form and validate -->
-<script>
-   document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('.reply-comment-btn').forEach(button => {
-         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Hide all other reply forms
-            document.querySelectorAll('.reply-comment-form').forEach(form => {
-               form.style.display = 'none';
-            });
-            // Toggle the clicked reply form
-            const replyForm = this.nextElementSibling;
-            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
-         });
-      });
-
-      document.querySelectorAll('.cancel-comment-reply').forEach(button => {
-         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            this.closest('.reply-comment-form').style.display = 'none';
-         });
-      });
-
-      // Validate reply form on submission
-      document.querySelectorAll('.comment-form').forEach(form => {
-         form.addEventListener('submit', function(e) {
-            const comment = this.querySelector('textarea[name="comment"]');
-            const author = this.querySelector('input[name="author"]');
-            const email = this.querySelector('input[name="email"]');
-
-            if (!comment.value.trim()) {
-               e.preventDefault();
-               alert('Please fill the required comment field.');
-            }
-            if (author && !author.value.trim()) {
-               e.preventDefault();
-               alert('Please fill the required name field.');
-            }
-            if (email && !email.value.trim()) {
-               e.preventDefault();
-               alert('Please fill the required email field.');
-            }
-         });
-      });
-   });
-</script>
