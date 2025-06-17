@@ -199,7 +199,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
       <h3 class="fs-5 mb-3">Rate Us</h3>
       <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
          <span class="text-dark fs-4 fw-bold"><?php echo esc_html($average_rating); ?></span>
-         <div class="star-rating d-flex align-items-center gap-1 fs-5">
+         <div class="star-rating-display">
             <?php
             $full_stars = floor($average_rating);
             $has_half_star = ($average_rating - $full_stars) >= 0.5;
@@ -214,7 +214,6 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                }
             }
             ?>
-            <input type="hidden" name="selected_rating" id="selectedRating">
          </div>
          <span class="text-muted">(<?php echo esc_html($total_reviews); ?> reviews)</span>
       </div>
@@ -233,15 +232,21 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                You have already rated, You can edit your previous review.
             </p>
          <?php endif; ?>
-         <form method="post" id="reviewForm" style="display: none;">
-            <div class="review-textarea mt-2" id="reviewTextarea">
-               <textarea class="form-control" rows="3" placeholder="Share your experience..." name="review_text" id="reviewText"></textarea>
-               <div id="reviewTextError" class="text-danger small mt-1" style="display: none;">
-                  Please enter your review.
-               </div>
-               <input type="hidden" name="rating" id="formRating">
-               <button type="submit" class="btn btn-custom-red btn-sm mt-2" name="submit_review" id="submitReviewBtn">Submit Review</button>
+        <form method="post" id="reviewForm" style="display: none;">
+            <div class="star-rating my-3">
+               <?php for ($i = 5; $i >= 1; $i--) : ?>
+                  <input type="radio" id="new-star<?php echo $i; ?>" name="rating" value="<?php echo $i; ?>" <?php echo $has_user_reviewed ? 'disabled' : ''; ?>>
+                  <label for="new-star<?php echo $i; ?>"><i class="bi bi-star-fill"></i></label>
+               <?php endfor; ?>
             </div>
+            <textarea class="form-control" rows="3" placeholder="Share your experience..." name="review_text" id="reviewText"></textarea>
+            <div id="reviewTextError" class="text-danger small mt-1" style="display: none;">
+               Please enter your review
+            </div>
+            <div id="ratingError" class="text-danger small mb-2" style="display: none;">
+               Please select a rating
+            </div>
+            <button type="submit" class="btn btn-custom-red btn-sm mt-2" name="submit_review" id="submitReviewBtn">Submit Review</button>
          </form>
       </div>
 
@@ -257,7 +262,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                $review->id
             )) > 0;
             ?>
-            <div class="review-item mb-4" data-review-id="<?php echo esc_attr($review->id); ?>">
+            <div class="review-item mb-0" data-review-id="<?php echo esc_attr($review->id); ?>">
                <div class="d-flex">
                   <div class="flex-shrink-0">
                      <img src="<?php echo esc_url(get_avatar_url($review->user_id, ['size' => 40])); ?>" class="rounded-circle" width="40" height="40" alt="User">
@@ -377,26 +382,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
 <!-- End Rating Section -->
 
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-         <div class="modal-header">
-            <p class="modal-title text-capitalize fs-6" id="loginModalLabel">Choose your preferred login method</p>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <div class="d-grid gap-3">
-               <a class="btn btn-danger" href="<?php echo esc_url(wp_login_url(get_permalink())); ?>">
-                  <i class="fas fa-sign-in-alt me-2"></i>Login
-               </a>
-               <a class="btn btn-danger" href="<?php echo esc_url(wp_registration_url()); ?>">
-                  <i class="fas fa-user-plus me-2"></i>Register
-               </a>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
+<?php get_template_part('parts/single/login', 'modal'); ?>
 
 <script>
    document.addEventListener('DOMContentLoaded', function() {
