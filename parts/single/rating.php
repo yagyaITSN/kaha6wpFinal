@@ -1,5 +1,4 @@
 <?php
-
 // Create the rating and review table if it doesn't exist
 global $wpdb;
 $table_name = $wpdb->prefix . 'rating_review';
@@ -232,7 +231,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                You have already rated, You can edit your previous review.
             </p>
          <?php endif; ?>
-        <form method="post" id="reviewForm" style="display: none;">
+         <form method="post" id="reviewForm" style="display: none;">
             <div class="star-rating my-3">
                <?php for ($i = 5; $i >= 1; $i--) : ?>
                   <input type="radio" id="new-star<?php echo $i; ?>" name="rating" value="<?php echo $i; ?>" <?php echo $has_user_reviewed ? 'disabled' : ''; ?>>
@@ -580,3 +579,11 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
       window.history.replaceState(null, null, window.location.href);
    }
 </script>
+
+<style>
+   .star-rating {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+   }
+</style>
