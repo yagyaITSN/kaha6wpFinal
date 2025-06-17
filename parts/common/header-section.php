@@ -12,13 +12,10 @@
       <?php elseif (is_page('faq')): ?>
          <h1 class="fs-1 fw-bold">Frequently Asked Questions</h1>
          <p class="lead text-muted fs-6">Find answers to common questions about Kaha6 Business Directory</p>
-      <?php elseif ($page == 'search.php'): ?>
-         <h1 class="fs-1 fw-bold">Search Reults for "IT Service Nepal"</h1>
-         <p class="lead text-muted fs-6">Find answers to common questions about Kaha6 Business Directory</p>
-      <?php elseif ($page == 'login.php'): ?>
+      <?php elseif (is_page('login')): ?>
          <h1 class="fs-1 fw-bold">Join Kaha6 Business Directory</h1>
          <p class="lead text-muted fs-6">Manage your business listings and connect with customers</p>
-      <?php elseif ($page == 'page-register.php'): ?>
+      <?php elseif (is_page('register-to-submit-your-company')): ?>
          <h1 class="fs-1 fw-bold">Register to Submit your Business</h1>
          <p class="lead text-muted fs-6">Join Nepal's premier business directory and reach more customers</p>
       <?php endif; ?>

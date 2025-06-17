@@ -954,7 +954,7 @@ function get_terms_chekboxes_model($taxonomy, $args = [], $selected_terms = [])
     if (!empty($terms) && !is_wp_error($terms)) {
         foreach ($terms as $term) {
             $output .= '<div class="col-12 col-lg-6 mb-3">';
-            $output .= '<a href="#" class="d-flex align-items-center gap-2 text-primary" data-bs-toggle="modal" data-bs-target="#modal-' . esc_attr($term->slug) . '"><i class="fa fa-list-ul" aria-hidden="true"></i> ' . esc_html($term->name) . '</a>';
+            $output .= '<a style="color: var(--cl--primary);" href="#" class="d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modal-' . esc_attr($term->slug) . '"><i class="fa fa-list-ul" aria-hidden="true"></i> ' . esc_html($term->name) . '</a>';
             $output .= '<div class="modal fade" id="modal-' . esc_attr($term->slug) . '" tabindex="-1" aria-labelledby="modalLabel-' . esc_attr($term->slug) . '" aria-hidden="true">';
             $output .= '<div class="modal-dialog">';
             $output .= '<div class="modal-content">';
@@ -988,7 +988,7 @@ function get_terms_chekboxes_model($taxonomy, $args = [], $selected_terms = [])
 
             $output .= '</div>';
             $output .= '<div class="modal-footer">';
-            $output .= '<button type="button" class="btn btn-primary bg-primary border-0" data-bs-dismiss="modal">Close</button>';
+            $output .= '<button type="button" class="btn btn-custom-red border-0" data-bs-dismiss="modal">Close</button>';
             $output .= '</div>';
             $output .= '</div>';
             $output .= '</div>';
