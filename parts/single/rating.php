@@ -32,7 +32,7 @@ if (isset($_POST['submit_review']) && is_user_logged_in()) {
    } elseif (empty($review)) {
       $error = 'Please enter your review.';
    } else {
-      $wpdb->insert(
+      $result = $wpdb->insert(
          $table_name,
          [
             'user_id' => $user_id,
@@ -44,9 +44,18 @@ if (isset($_POST['submit_review']) && is_user_logged_in()) {
          ],
          ['%d', '%d', '%s', '%d', '%d', '%s']
       );
+
       if ($wpdb->last_error) {
          $error = 'Error submitting review. Please try again.';
       } else {
+         $review_id = $wpdb->insert_id;
+         $review_data = [
+            'user_id' => $user_id,
+            'rating' => $rating,
+            'review' => $review,
+            'company_id' => $company_id
+         ];
+         send_review_notification_email($review_id, 'add', $review_data);
          $success = 'Review submitted successfully!';
       }
    }
@@ -123,7 +132,7 @@ if (isset($_POST['edit_review']) && is_user_logged_in()) {
          } elseif (empty($review_text)) {
             $error = 'Please enter your review.';
          } else {
-            $wpdb->update(
+            $result = $wpdb->update(
                $table_name,
                ['rating' => $rating, 'review' => $review_text],
                ['id' => $review_id],
@@ -133,6 +142,13 @@ if (isset($_POST['edit_review']) && is_user_logged_in()) {
             if ($wpdb->last_error) {
                $error = 'Error updating review. Please try again.';
             } else {
+               $updated_review_data = [
+                  'user_id' => $review_data->user_id,
+                  'rating' => $rating,
+                  'review' => $review_text,
+                  'company_id' => get_the_ID()
+               ];
+               send_review_notification_email($review_id, 'update', $updated_review_data);
                $success = 'Review updated successfully!';
             }
          }
@@ -169,7 +185,6 @@ foreach ($rating_counts as $star => $count) {
    $rating_percentages[$star] = $total_reviews > 0 ? ($count / $total_reviews) * 100 : 0;
 }
 
-
 // Check if current user has already reviewed
 $user_id = is_user_logged_in() ? get_current_user_id() : 0;
 $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
@@ -177,6 +192,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
    $company_id,
    $user_id
 )) > 0;
+
 ?>
 
 <?php if (!empty($error)) : ?>
@@ -264,7 +280,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
             <div class="review-item mb-0" data-review-id="<?php echo esc_attr($review->id); ?>">
                <div class="d-flex">
                   <div class="flex-shrink-0">
-                     <img src="<?php echo esc_url(get_avatar_url($review->user_id, ['size' => 40])); ?>" class="rounded-circle" width="40" height="40" alt="User">
+                     <img src="<?php echo esc_url(get_avatar_url($reply->user_id, ['size' => 30])); ?>" class="rounded-circle rating-avatar" width="40" height="40" alt="User">
                   </div>
                   <div class="flex-grow-1 ms-3">
                      <div class="d-flex align-items-center mb-1">
@@ -324,7 +340,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                               <div class="reply-item mb-3">
                                  <div class="d-flex">
                                     <div class="flex-shrink-0">
-                                       <img src="<?php echo esc_url(get_avatar_url($reply->user_id, ['size' => 30])); ?>" class="rounded-circle" width="30" height="30" alt="User">
+                                       <img src="<?php echo esc_url(get_avatar_url($reply->user_id, ['size' => 30])); ?>" class="rounded-circle rating-avatar" width="30" height="30" alt="User">
                                     </div>
                                     <div class="flex-grow-1 ms-2">
                                        <div class="d-flex align-items-center mb-1">
@@ -585,5 +601,9 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
       display: flex;
       flex-direction: row-reverse;
       justify-content: flex-end;
+   }
+
+   .rating-avatar {
+      object-fit: cover;
    }
 </style>

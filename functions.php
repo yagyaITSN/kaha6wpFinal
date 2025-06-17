@@ -240,6 +240,7 @@ require_once 'inc/functions.php';
 require_once 'inc/mailfunc.php';
 require_once 'inc/custom-mail.php';
 require_once 'inc/ads.php';
+require_once 'inc/rating-mail.php';
 
 
 // Register the admin settings page
