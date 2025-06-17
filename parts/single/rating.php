@@ -280,7 +280,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
             <div class="review-item mb-0" data-review-id="<?php echo esc_attr($review->id); ?>">
                <div class="d-flex">
                   <div class="flex-shrink-0">
-                     <img src="<?php echo esc_url(get_avatar_url($reply->user_id, ['size' => 30])); ?>" class="rounded-circle rating-avatar" width="40" height="40" alt="User">
+                     <img src="<?php echo esc_url(get_avatar_url($review->user_id, ['size' => 40])); ?>" class="rounded-circle" width="40" height="40" alt="User">
                   </div>
                   <div class="flex-grow-1 ms-3">
                      <div class="d-flex align-items-center mb-1">
@@ -340,7 +340,7 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                               <div class="reply-item mb-3">
                                  <div class="d-flex">
                                     <div class="flex-shrink-0">
-                                       <img src="<?php echo esc_url(get_avatar_url($reply->user_id, ['size' => 30])); ?>" class="rounded-circle rating-avatar" width="30" height="30" alt="User">
+                                       <img src="<?php echo esc_url(get_avatar_url($review->user_id, ['size' => 40])); ?>" class="rounded-circle" width="40" height="40" alt="User">
                                     </div>
                                     <div class="flex-grow-1 ms-2">
                                        <div class="d-flex align-items-center mb-1">
