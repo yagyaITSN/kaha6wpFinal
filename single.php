@@ -205,6 +205,11 @@ $views = get_post_meta(get_the_ID(), 'post_views_count', true);
           </a>
         </div>
       <?php endif; ?>
+
+      <?php if (current_user_can('administrator')): ?>
+        <!-- Views -->
+        <h5 class="mb-0 text-white fs-6 mt-3">Views: <?php echo $views ? $views : '0' ?></h5>
+      <?php endif; ?>
     </div>
     <!-- Company Logo -->
 
@@ -424,10 +429,10 @@ $views = get_post_meta(get_the_ID(), 'post_views_count', true);
 
 <!-- Comment and Contact Details Section -->
 <section class="comment-contact-details container">
-  <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 mb-4">Contact Us</h2>
+  <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 mb-4">Rate Us</h2>
 
   <!-- Rating Section -->
-  <?php include 'parts/single/rating.php' ?>
+  <?php get_template_part('parts/single/rating'); ?>
   <!-- End Rating Section -->
 
   <!-- Banner -->
@@ -443,9 +448,6 @@ $views = get_post_meta(get_the_ID(), 'post_views_count', true);
     }
     ?>
   </section>
-
-  <!-- Login Modal (with only your original login/register options) -->
-  <?php include 'parts/single/login-modal.php' ?>
 
 </section>
 <!-- End Comment and Contact Details Section -->

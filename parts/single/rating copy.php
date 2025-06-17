@@ -1,5 +1,4 @@
 <?php
-
 // Create the rating and review table if it doesn't exist
 global $wpdb;
 $table_name = $wpdb->prefix . 'rating_review';
@@ -170,7 +169,6 @@ foreach ($rating_counts as $star => $count) {
    $rating_percentages[$star] = $total_reviews > 0 ? ($count / $total_reviews) * 100 : 0;
 }
 
-
 // Check if current user has already reviewed
 $user_id = is_user_logged_in() ? get_current_user_id() : 0;
 $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
@@ -180,26 +178,13 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
 )) > 0;
 ?>
 
-<?php if (!empty($error)) : ?>
-   <div class="alert alert-danger alert-dismissible fade show alert-fixed-top w-50" role="alert">
-      <?php echo esc_html($error); ?>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-   </div>
-<?php endif; ?>
-<?php if (!empty($success)) : ?>
-   <div class="alert alert-success alert-dismissible fade show alert-fixed-top w-50" role="alert">
-      <?php echo esc_html($success); ?>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-   </div>
-<?php endif; ?>
-
 <!-- Rating Section -->
 <div class="d-flex mb-4 flex-wrap flex-md-nowrap gap-3 justify-content-between">
    <div class="col-12 col-md-6 mb-4 mb-md-0">
       <h3 class="fs-5 mb-3">Rate Us</h3>
       <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
          <span class="text-dark fs-4 fw-bold"><?php echo esc_html($average_rating); ?></span>
-         <div class="star-rating d-flex align-items-center gap-1 fs-5">
+         <div class="star-rating-display">
             <?php
             $full_stars = floor($average_rating);
             $has_half_star = ($average_rating - $full_stars) >= 0.5;
@@ -214,39 +199,40 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                }
             }
             ?>
-            <input type="hidden" name="selected_rating" id="selectedRating">
          </div>
          <span class="text-muted">(<?php echo esc_html($total_reviews); ?> reviews)</span>
-      </div>
-      <div id="ratingError" class="text-danger small mb-2" style="display: none;">
-         Please select a rating between 1 and 5 stars.
       </div>
 
       <!-- Review Text Section -->
       <div class="review-section mt-3">
-         <button class="btn btn-custom-red btn-sm" id="toggleReviewBtn"
-            <?php echo $has_user_reviewed ? 'disabled' : ''; ?>>
+         <button class="btn btn-custom-red btn-sm" id="toggleReviewBtn" <?php echo $has_user_reviewed ? 'disabled' : ''; ?>>
             <i class="bi bi-pencil-square"></i> Add Review
          </button>
          <?php if ($has_user_reviewed): ?>
             <p class="fs-7 my-1 text-muted">
-               You have already rated, You can edit your previous review.
+               You have already rated. You can edit your previous review.
             </p>
          <?php endif; ?>
          <form method="post" id="reviewForm" style="display: none;">
-            <div class="review-textarea mt-2" id="reviewTextarea">
-               <textarea class="form-control" rows="3" placeholder="Share your experience..." name="review_text" id="reviewText"></textarea>
-               <div id="reviewTextError" class="text-danger small mt-1" style="display: none;">
-                  Please enter your review.
-               </div>
-               <input type="hidden" name="rating" id="formRating">
-               <button type="submit" class="btn btn-custom-red btn-sm mt-2" name="submit_review" id="submitReviewBtn">Submit Review</button>
+            <div class="star-rating mb-2">
+               <?php for ($i = 5; $i >= 1; $i--) : ?>
+                  <input type="radio" id="new-star<?php echo $i; ?>" name="rating" value="<?php echo $i; ?>" <?php echo $has_user_reviewed ? 'disabled' : ''; ?>>
+                  <label for="new-star<?php echo $i; ?>"><i class="bi bi-star-fill"></i></label>
+               <?php endfor; ?>
             </div>
+            <textarea class="form-control" rows="3" placeholder="Share your experience..." name="review_text" id="reviewText"></textarea>
+            <div id="reviewTextError" class="text-danger small mt-1" style="display: none;">
+               Please enter your review
+            </div>
+            <div id="ratingError" class="text-danger small mb-2" style="display: none;">
+               Please select a rating
+            </div>
+            <button type="submit" class="btn btn-custom-red btn-sm mt-2" name="submit_review" id="submitReviewBtn">Submit Review</button>
          </form>
       </div>
 
       <!-- Reviews Display -->
-      <div class="reviews-container mt-4" id="reviewsContainer">
+      <div class="reviews-container mt-3 p-3 rounded-2" id="reviewsContainer">
          <?php foreach ($reviews as $review) : ?>
             <?php
             $user_info = get_userdata($review->user_id);
@@ -257,56 +243,39 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                $review->id
             )) > 0;
             ?>
-            <div class="review-item mb-4" data-review-id="<?php echo esc_attr($review->id); ?>">
+            <div class="review-item mb-4" data-user-id="<?php echo esc_attr($review->user_id); ?>" data-review-id="<?php echo esc_attr($review->id); ?>">
                <div class="d-flex">
                   <div class="flex-shrink-0">
                      <img src="<?php echo esc_url(get_avatar_url($review->user_id, ['size' => 40])); ?>" class="rounded-circle" width="40" height="40" alt="User">
                   </div>
                   <div class="flex-grow-1 ms-3">
                      <div class="d-flex align-items-center mb-1">
-                        <h5 class="mb-0 me-2"><?php echo $user_name; ?></h5>
+                        <h5 class="mb-0 me-2 fs-6"><?php echo $user_name; ?></h5>
                         <small class="text-muted"><?php echo human_time_diff(strtotime($review->date_time), current_time('timestamp')); ?> ago</small>
                      </div>
                      <div class="star-rating-display mb-2">
                         <?php echo str_repeat('<i class="bi bi-star-fill text-warning"></i>', $review->rating); ?>
+                        <?php echo str_repeat('<i class="bi bi-star-fill text-muted"></i>', 5 - $review->rating); ?>
                      </div>
                      <p class="mb-2"><?php echo esc_html($review->review); ?></p>
-                     <?php if (is_user_logged_in() && get_current_user_id() == get_the_author_meta('ID') && !$has_reply) : ?>
-                        <button class="btn btn-sm btn-outline-secondary reply-btn" data-review-id="<?php echo esc_attr($review->id); ?>">Reply</button>
-                     <?php endif; ?>
-                     <?php if ($is_editable) : ?>
-                        <button class="btn btn-sm btn-outline-secondary edit-review-btn ms-2">Edit</button>
-                     <?php endif; ?>
 
-                     <!-- Reply form (hidden by default) -->
-                     <?php if (is_user_logged_in() && get_current_user_id() == get_the_author_meta('ID') && !$has_reply) : ?>
-                        <form method="post" class="reply-form mt-2" style="display: none;" data-review-id="<?php echo esc_attr($review->id); ?>">
-                           <input type="hidden" name="review_id" value="<?php echo esc_attr($review->id); ?>">
-                           <textarea class="form-control mb-2" rows="2" placeholder="Write your reply..." name="reply_text"></textarea>
-                           <div class="text-danger small mt-1 reply-error" style="display: none;">Please enter your reply.</div>
-                           <button type="submit" class="btn btn-sm btn-custom-red submit-reply" name="submit_reply">Submit</button>
-                           <button type="button" class="btn btn-sm btn-outline-secondary cancel-reply ms-2">Cancel</button>
-                        </form>
-                     <?php endif; ?>
-
-                     <!-- Edit form (hidden by default) -->
                      <?php if ($is_editable) : ?>
-                        <form method="post" class="edit-review-form mt-2" style="display: none;">
-                           <input type="hidden" name="review_id" value="<?php echo esc_attr($review->id); ?>">
-                           <input type="hidden" name="is_reply" value="0">
-                           <div class="d-flex align-items-center gap-1 mb-2 star-rating">
-                              <?php for ($i = 5; $i >= 1; $i--) : ?>
-                                 <input type="radio" id="edit-star<?php echo $review->id . '-' . $i; ?>" name="edit_rating" value="<?php echo $i; ?>" <?php checked($i, $review->rating); ?>>
-                                 <label for="edit-star<?php echo $review->id . '-' . $i; ?>"><i class="bi bi-star-fill"></i></label>
-                              <?php endfor; ?>
-                              <input type="hidden" name="rating" id="editFormRating<?php echo $review->id; ?>">
-                           </div>
-                           <div class="text-danger small mb-2 edit-rating-error" style="display: none;">Please select a rating between 1 and 5 stars.</div>
-                           <textarea class="form-control mb-2" rows="3" name="review_text"><?php echo esc_textarea($review->review); ?></textarea>
-                           <div class="text-danger small mb-2 edit-review-error" style="display: none;">Please enter your review.</div>
-                           <button type="submit" class="btn btn-sm btn-custom-red" name="edit_review">Update Review</button>
-                           <button type="button" class="btn btn-sm btn-outline-secondary cancel-edit ms-2">Cancel</button>
-                        </form>
+                        <div class="review-actions mt-2">
+                           <button class="btn btn-sm btn-outline-secondary edit-review-btn">Edit</button>
+                           <form method="post" class="edit-review-form mt-2" style="display: none;">
+                              <input type="hidden" name="review_id" value="<?php echo esc_attr($review->id); ?>">
+                              <input type="hidden" name="is_reply" value="0">
+                              <div class="star-rating-edit mb-2">
+                                 <?php for ($i = 5; $i >= 1; $i--) : ?>
+                                    <input type="radio" id="edit-star<?php echo $review->id . '-' . $i; ?>" name="rating" value="<?php echo $i; ?>" <?php checked($i, $review->rating); ?>>
+                                    <label for="edit-star<?php echo $review->id . '-' . $i; ?>"><i class="bi bi-star-fill"></i></label>
+                                 <?php endfor; ?>
+                              </div>
+                              <textarea class="form-control mb-2" rows="3" name="review_text"><?php echo esc_textarea($review->review); ?></textarea>
+                              <button type="submit" class="btn btn-sm btn-custom-red" name="edit_review">Save Changes</button>
+                              <button type="button" class="btn btn-sm btn-outline-secondary cancel-edit-btn ms-2">Cancel</button>
+                           </form>
+                        </div>
                      <?php endif; ?>
 
                      <!-- Replies -->
@@ -314,10 +283,12 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                         <?php
                         foreach ($replies as $reply) :
                            if ($reply->parent_id == $review->id) :
+                              $reply_user_info = get_userdata($reply->user_id);
+                              $reply_user_name = $reply_user_info ? esc_html($reply_user_info->display_name) : 'Anonymous';
                               $is_reply_editable = is_user_logged_in() && (get_current_user_id() == $reply->user_id);
                               $post_title = esc_html(get_the_title($company_id));
                         ?>
-                              <div class="reply-item mb-3">
+                              <div class="reply-item mb-3" data-user-id="<?php echo esc_attr($reply->user_id); ?>" data-reply-id="<?php echo esc_attr($reply->id); ?>">
                                  <div class="d-flex">
                                     <div class="flex-shrink-0">
                                        <img src="<?php echo esc_url(get_avatar_url($reply->user_id, ['size' => 30])); ?>" class="rounded-circle" width="30" height="30" alt="User">
@@ -328,17 +299,15 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                                           <small class="text-muted"><?php echo human_time_diff(strtotime($reply->date_time), current_time('timestamp')); ?> ago</small>
                                        </div>
                                        <p class="mb-0 small"><?php echo esc_html($reply->review); ?></p>
+
                                        <?php if ($is_reply_editable) : ?>
                                           <button class="btn btn-sm btn-outline-secondary edit-reply-btn mt-1">Edit</button>
-                                       <?php endif; ?>
-                                       <?php if ($is_reply_editable) : ?>
-                                          <form method="post" class="edit-reply-form mt-2" style="display: none;">
+                                          <form method="post" class="reply-actions mt-2" style="display: none;">
                                              <input type="hidden" name="review_id" value="<?php echo esc_attr($reply->id); ?>">
                                              <input type="hidden" name="is_reply" value="1">
-                                             <textarea class="form-control mb-2" rows="2" name="review_text"><?php echo esc_textarea($reply->review); ?></textarea>
-                                             <div class="text-danger small mb-2 edit-reply-error" style="display: none;">Please enter your reply.</div>
-                                             <button type="submit" class="btn btn-sm btn-custom-red" name="edit_review">Update Reply</button>
-                                             <button type="button" class="btn btn-sm btn-outline-secondary cancel-edit-reply ms-2">Cancel</button>
+                                             <textarea class="form-control mb-2 mt-2" rows="2" name="review_text"><?php echo esc_textarea($reply->review); ?></textarea>
+                                             <button type="submit" class="btn btn-sm btn-custom-red" name="edit_review">Save</button>
+                                             <button type="button" class="btn btn-sm btn-outline-secondary cancel-reply-btn ms-2">Cancel</button>
                                           </form>
                                        <?php endif; ?>
                                     </div>
@@ -346,6 +315,17 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
                               </div>
                         <?php endif;
                         endforeach; ?>
+
+                        <?php if (is_user_logged_in() && get_current_user_id() == get_the_author_meta('ID') && !$has_reply) : ?>
+                           <form method="post" class="reply-form mt-2" style="display: none;">
+                              <input type="hidden" name="review_id" value="<?php echo esc_attr($review->id); ?>">
+                              <textarea class="form-control mb-2" rows="2" placeholder="Write your reply..." name="reply_text"></textarea>
+                              <div class="text-danger small mt-1 reply-error" style="display: none;">Please enter your reply.</div>
+                              <button type="submit" class="btn btn-sm btn-custom-red" name="submit_reply">Submit</button>
+                              <button type="button" class="btn btn-sm btn-outline-secondary cancel-reply-btn ms-2">Cancel</button>
+                           </form>
+                           <button class="btn btn-sm btn-outline-secondary reply-btn" data-review-id="<?php echo esc_attr($review->id); ?>">Reply</button>
+                        <?php endif; ?>
                      </div>
                   </div>
                </div>
@@ -374,7 +354,6 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
       </div>
    </div>
 </div>
-<!-- End Rating Section -->
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
@@ -398,6 +377,19 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
    </div>
 </div>
 
+<?php if (!empty($error)) : ?>
+   <div class="alert alert-danger alert-dismissible fade show alert-fixed-top" role="alert">
+      <?php echo esc_html($error); ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+<?php endif; ?>
+<?php if (!empty($success)) : ?>
+   <div class="alert alert-success alert-dismissible fade show alert-fixed-top" role="alert">
+      <?php echo esc_html($success); ?>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+   </div>
+<?php endif; ?>
+
 <script>
    document.addEventListener('DOMContentLoaded', function() {
       const toggleReviewBtn = document.getElementById('toggleReviewBtn');
@@ -406,95 +398,77 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
       const reviewText = document.getElementById('reviewText');
       const ratingError = document.getElementById('ratingError');
       const reviewTextError = document.getElementById('reviewTextError');
-      const formRating = document.getElementById('formRating');
       let selectedRating = 0;
 
       // Handle star rating clicks
-      document.querySelectorAll('.star-rating input[name="rating"]').forEach(radio => {
+      document.querySelectorAll('#reviewForm input[name="rating"]').forEach(radio => {
          radio.addEventListener('change', function() {
             selectedRating = parseInt(this.value);
-            formRating.value = selectedRating;
             ratingError.style.display = 'none';
          });
       });
 
       // Toggle review form
-      toggleReviewBtn.addEventListener('click', function() {
-         if (reviewForm.style.display === 'none') {
-            <?php if (!is_user_logged_in()) : ?>
-               const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-               loginModal.show();
-               return;
-            <?php endif; ?>
-            reviewForm.style.display = 'block';
-            toggleReviewBtn.innerHTML = '<i class="bi bi-x"></i> Cancel';
-            reviewText.value = '';
-            selectedRating = 0;
-            formRating.value = '';
-            document.querySelectorAll('input[name="rating"]').forEach(radio => radio.checked = false);
-         } else {
-            reviewForm.style.display = 'none';
-            toggleReviewBtn.innerHTML = '<i class="bi bi-pencil-square"></i> Add Review';
-            ratingError.style.display = 'none';
-            reviewTextError.style.display = 'none';
-         }
-      });
+      if (toggleReviewBtn) {
+         toggleReviewBtn.addEventListener('click', function() {
+            if (reviewForm.style.display === 'none') {
+               <?php if (!is_user_logged_in()) : ?>
+                  const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                  loginModal.show();
+                  return;
+               <?php endif; ?>
+               reviewForm.style.display = 'block';
+               toggleReviewBtn.innerHTML = '<i class="bi bi-x"></i> Cancel';
+               reviewText.value = '';
+               selectedRating = 0;
+               document.querySelectorAll('#reviewForm input[name="rating"]').forEach(radio => radio.checked = false);
+            } else {
+               reviewForm.style.display = 'none';
+               toggleReviewBtn.innerHTML = '<i class="bi bi-pencil-square"></i> Add Review';
+               ratingError.style.display = 'none';
+               reviewTextError.style.display = 'none';
+            }
+         });
+      }
 
       // Handle review form submission
-      submitReviewBtn.addEventListener('click', function(e) {
-         if (!selectedRating || selectedRating < 1 || selectedRating > 5) {
-            ratingError.style.display = 'block';
-            e.preventDefault();
-            return;
-         } else {
-            ratingError.style.display = 'none';
-         }
-         if (reviewText.value.trim() === '') {
-            reviewTextError.style.display = 'block';
-            e.preventDefault();
-            return;
-         } else {
-            reviewTextError.style.display = 'none';
-         }
-         formRating.value = selectedRating;
-      });
+      if (submitReviewBtn) {
+         submitReviewBtn.addEventListener('click', function(e) {
+            const rating = document.querySelector('#reviewForm input[name="rating"]:checked');
+            if (!rating) {
+               ratingError.style.display = 'block';
+               e.preventDefault();
+               return;
+            } else {
+               ratingError.style.display = 'none';
+            }
+            if (reviewText.value.trim() === '') {
+               reviewTextError.style.display = 'block';
+               e.preventDefault();
+               return;
+            } else {
+               reviewTextError.style.display = 'none';
+            }
+         });
+      }
 
       // Handle reply buttons
       document.querySelectorAll('.reply-btn').forEach(button => {
          button.addEventListener('click', function() {
-            console.log('Reply button clicked for review ID:', this.getAttribute('data-review-id')); // Debug log
             const reviewId = this.getAttribute('data-review-id');
             const reviewItem = this.closest('.review-item');
-            const replyForm = reviewItem.querySelector(`.reply-form[data-review-id="${reviewId}"]`);
-            console.log('Found reply form:', replyForm); // Debug the found element
-            if (replyForm) {
-               replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
-            } else {
-               console.error('Reply form not found for review ID:', reviewId); // Debug error
-            }
+            const replyForm = reviewItem.querySelector('.reply-form');
+            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+            this.style.display = 'none';
          });
       });
 
       // Handle cancel reply
-      document.querySelectorAll('.cancel-reply').forEach(button => {
+      document.querySelectorAll('.cancel-reply-btn').forEach(button => {
          button.addEventListener('click', function() {
-            this.closest('.reply-form').style.display = 'none';
-            this.closest('.reply-form').querySelector('.reply-error').style.display = 'none';
-         });
-      });
-
-      // Handle reply form submission
-      document.querySelectorAll('.submit-reply').forEach(button => {
-         button.addEventListener('click', function(e) {
             const replyForm = this.closest('.reply-form');
-            const replyText = replyForm.querySelector('textarea[name="reply_text"]');
-            const replyError = replyForm.querySelector('.reply-error');
-            if (replyText.value.trim() === '') {
-               replyError.style.display = 'block';
-               e.preventDefault();
-            } else {
-               replyError.style.display = 'none';
-            }
+            replyForm.style.display = 'none';
+            replyForm.closest('.replies').querySelector('.reply-btn').style.display = 'block';
          });
       });
 
@@ -504,54 +478,27 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
             const reviewItem = this.closest('.review-item');
             const editForm = reviewItem.querySelector('.edit-review-form');
             editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+            this.style.display = 'none';
          });
       });
 
       // Handle cancel edit review
-      document.querySelectorAll('.cancel-edit').forEach(button => {
+      document.querySelectorAll('.cancel-edit-btn').forEach(button => {
          button.addEventListener('click', function() {
-            this.closest('.edit-review-form').style.display = 'none';
-            this.closest('.edit-review-form').querySelector('.edit-rating-error').style.display = 'none';
-            this.closest('.edit-review-form').querySelector('.edit-review-error').style.display = 'none';
+            const editForm = this.closest('.edit-review-form');
+            editForm.style.display = 'none';
+            editForm.closest('.review-actions').querySelector('.edit-review-btn').style.display = 'block';
          });
       });
 
-      // Handle edit review form submission
-      document.querySelectorAll('.edit-review-form').forEach(form => {
-         let editSelectedRating = 0;
-         const editRatingInputs = form.querySelectorAll('input[name="edit_rating"]');
-         const editFormRating = form.querySelector('[id^="editFormRating"]');
-         editRatingInputs.forEach(radio => {
-            radio.addEventListener('change', function() {
-               editSelectedRating = parseInt(this.value);
-               editFormRating.value = editSelectedRating;
-               form.querySelector('.edit-rating-error').style.display = 'none';
+      // Highlight stars on hover for edit forms
+      document.querySelectorAll('.star-rating-edit label').forEach(label => {
+         label.addEventListener('mouseover', function() {
+            const starValue = parseInt(this.htmlFor.split('-')[1]);
+            const stars = this.closest('.star-rating-edit').querySelectorAll('label i');
+            stars.forEach((star, index) => {
+               star.style.color = index < starValue ? 'var(--cl--primary)' : 'rgba(193, 39, 45, 0.1)';
             });
-         });
-
-         form.addEventListener('submit', function(e) {
-            const reviewText = form.querySelector('textarea[name="review_text"]');
-            const ratingError = form.querySelector('.edit-rating-error');
-            const reviewError = form.querySelector('.edit-review-error');
-            let hasError = false;
-
-            if (!editSelectedRating || editSelectedRating < 1 || editSelectedRating > 5) {
-               ratingError.style.display = 'block';
-               hasError = true;
-            } else {
-               ratingError.style.display = 'none';
-            }
-            if (reviewText.value.trim() === '') {
-               reviewError.style.display = 'block';
-               hasError = true;
-            } else {
-               reviewError.style.display = 'none';
-            }
-            if (hasError) {
-               e.preventDefault();
-            } else {
-               editFormRating.value = editSelectedRating;
-            }
          });
       });
 
@@ -559,37 +506,23 @@ $has_user_reviewed = $wpdb->get_var($wpdb->prepare(
       document.querySelectorAll('.edit-reply-btn').forEach(button => {
          button.addEventListener('click', function() {
             const replyItem = this.closest('.reply-item');
-            const editForm = replyItem.querySelector('.edit-reply-form');
+            const editForm = replyItem.querySelector('.reply-actions');
             editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+            this.style.display = 'none';
          });
       });
 
       // Handle cancel edit reply
-      document.querySelectorAll('.cancel-edit-reply').forEach(button => {
+      document.querySelectorAll('.cancel-reply-btn').forEach(button => {
          button.addEventListener('click', function() {
-            this.closest('.edit-reply-form').style.display = 'none';
-            this.closest('.edit-reply-form').querySelector('.edit-reply-error').style.display = 'none';
-         });
-      });
-
-      // Handle edit reply form submission
-      document.querySelectorAll('.edit-reply-form').forEach(form => {
-         form.addEventListener('submit', function(e) {
-            const replyText = form.querySelector('textarea[name="review_text"]');
-            const replyError = form.querySelector('.edit-reply-error');
-            if (replyText.value.trim() === '') {
-               replyError.style.display = 'block';
-               e.preventDefault();
-            } else {
-               replyError.style.display = 'none';
-            }
+            const editForm = this.closest('.reply-actions');
+            editForm.style.display = 'none';
+            editForm.closest('.reply-item').querySelector('.edit-reply-btn').style.display = 'block';
          });
       });
    });
-</script>
 
-<!-- Avoids asking for resubmission of the form when page reload -->
-<script>
+   // Avoids asking for resubmission of the form when page reload
    if (window.history.replaceState) {
       window.history.replaceState(null, null, window.location.href);
    }

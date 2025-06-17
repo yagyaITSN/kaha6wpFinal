@@ -8,14 +8,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
              </div>
              <div class="modal-body">
-                <div class="d-flex flex-column gap-3">
-                   <a class="btn btn-custom-red" href="https://kaha6.com/login">
+                <div class="d-flex flex-column">
+                   <a class="btn btn-custom-red" href="<?php echo home_url('/login') ?>">
                       <i class="fas fa-sign-in-alt me-2"></i>Login
                    </a>
-                   <a class="btn btn-custom-red" href="https://kaha6.com/register-user">
-                      <i class="fas fa-user-plus me-2"></i>Register
-                   </a>
                 </div>
+                <?php echo do_shortcode('[google_login]'); ?>
              </div>
           </div>
        </div>
