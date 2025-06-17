@@ -1004,7 +1004,7 @@ function get_terms_chekboxes_model($taxonomy, $args = [], $selected_terms = [])
 
 function track_unique_visits()
 {
-    if (is_single() && !is_admin()) {
+    if ((is_single() || is_singular('blog')) && !is_admin()) {
         $post_id = get_the_ID();
         $ip_address = $_SERVER['REMOTE_ADDR'];
         $viewed_ips = get_post_meta($post_id, 'viewed_ips', true);
