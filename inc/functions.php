@@ -1615,3 +1615,22 @@ function itsn_show_business_count_column($value, $column_name, $user_id)
 
     return $value;
 }
+
+// as they are custom taxonomies by default they do not use the category.php
+/*
+taxonomy-ait-items-{term-slug}.php (e.g., taxonomy-ait-items-software.php)
+taxonomy-ait-items.php
+taxonomy.php
+archive.php
+index.php
+*/
+// Redirecting them to use category.php
+add_filter('template_include', function ($template) {
+    if (is_tax('ait-items') || is_tax('ait-locations')) {
+        $new_template = locate_template('category.php');
+        if (!empty($new_template)) {
+            return $new_template;
+        }
+    }
+    return $template;
+});

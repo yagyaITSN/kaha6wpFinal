@@ -1,6 +1,4 @@
-<?php get_header();
-echo "<!-- Loaded archive.php -->"; ?>
-
+<?php get_header(); ?>
 
 <!-- Hero Section -->
 <?php include 'parts/common/hero-section.php' ?>
