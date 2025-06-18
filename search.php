@@ -48,7 +48,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         </select>
       </div>
     </div>
-    <div class="category-cards mt-5" id="businessCards">
+    <?php /* <div class="category-cards mt-5" id="businessCards"> */ ?>
+    <div class="category-cards mt-5">
       <?php
       $args = array(
         'post_type' => 'ait-item',
@@ -180,35 +181,55 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
           </div>
         <?php
         endwhile;
-        ?>
-        <div class="card-pagination" id="pagination">
-          <?php
-          echo paginate_links(array(
-            'total' => $query->max_num_pages,
-            'current' => $paged,
-            'prev_text' => '«',
-            'next_text' => '»',
-            'type' => 'plain',
-            'before_page_number' => '<div>',
-            'after_page_number' => '</div>',
-            'link_before' => '',
-            'link_after' => '',
-            'add_args' => array(
-              'business-type' => $business_type,
-              'location' => $location,
-            ),
-            'add_fragment' => '',
-          ));
-          wp_reset_postdata();
-          ?>
-        </div>
-      <?php else : ?>
+      else : ?>
         <div class="card-not-found text-center" id="noResults">
           <h5 class="fs-5 fw-bold">No businesses found matching your search criteria</h5>
           <p>Please try different search terms or filters</p>
         </div>
       <?php endif; ?>
     </div>
+
+    <!-- Pagination Start -->
+    <div class="row pt-5 justify-content-center">
+      <div class="col d-flex justify-content-center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination mb-0">
+            <?php
+            $pagination_args = array(
+              'total' => $query->max_num_pages,
+              'current' => max(1, $paged),
+              'prev_text' => '«',
+              'next_text' => '»',
+              'type' => 'array',
+              'mid_size' => 1, // Show 1 page before and after current page
+              'end_size' => 1, // Show 1 page at the start and end
+              'add_args' => array(
+                's' => $keyword,
+                'business-type' => $business_type,
+                'location' => $location,
+              ),
+            );
+            $paginate_links = paginate_links($pagination_args);
+            if ($paginate_links) {
+              foreach ($paginate_links as $link) {
+                $is_current = strpos($link, 'current') !== false ? ' active' : '';
+                preg_match('/href=["\'](.*?)["\']/i', $link, $href);
+                preg_match('/>(.*?)</', $link, $text);
+                $href = isset($href[1]) ? $href[1] : '#';
+                $text = isset($text[1]) ? $text[1] : '';
+                if ($text === '…') {
+                  $text = '...';
+                }
+                echo '<li class="page-item' . $is_current . '"><a class="page-link" href="' . esc_url($href) . '">' . esc_html($text) . '</a></li>';
+              }
+            }
+            ?>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- Pagination End -->
+     
   </div>
 </section>
 <!-- End Category Cards -->

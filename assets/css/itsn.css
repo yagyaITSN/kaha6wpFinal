@@ -152,3 +152,18 @@
 .itsn-shadow {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+
+/* Dashboard End */
+
+/* Pagination */
+.pagination .page-link {
+  color: #C1272D;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #C1272D;
+  color: white;
+  border: 1px solid #C1272D;
+}
+
+/* Pagination end */

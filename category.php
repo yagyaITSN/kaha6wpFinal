@@ -22,7 +22,7 @@
         </select>
       </div>
     </div>
-    <div class="category-cards mt-5" id="businessCards">
+    <div class="category-cards mt-5" id="businessCardsddd">
 
 
       <?php
@@ -138,7 +138,11 @@
             </div>
           </div>
       <?php
-        endwhile;
+        endwhile; ?>
+        
+<div class="nav-previous alignleft"><?php previous_posts_link( 'Older posts' ); ?></div>
+<div class="nav-next alignright"><?php next_posts_link( 'Newer posts' ); ?></div>
+<?php
         wp_reset_postdata();
       else :
         echo '<p class="text-center">No companies found.</p>';

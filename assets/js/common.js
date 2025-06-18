@@ -226,50 +226,50 @@
     }
 
     // Category Page Filter
-    document.addEventListener('DOMContentLoaded', function () {
-        function setupCategoryFilter() {
-            const businessCardsContainer = document.getElementById('businessCards');
-            const ratingFilter = document.getElementById('ratingFilter');
-            const noResults = document.getElementById('noResults');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     function setupCategoryFilter() {
+    //         const businessCardsContainer = document.getElementById('businessCards');
+    //         const ratingFilter = document.getElementById('ratingFilter');
+    //         const noResults = document.getElementById('noResults');
 
-            if (!businessCardsContainer || !ratingFilter) {
-                console.warn('Required elements not found: businessCards or ratingFilter');
-                return;
-            }
+    //         if (!businessCardsContainer || !ratingFilter) {
+    //             console.warn('Required elements not found: businessCards or ratingFilter');
+    //             return;
+    //         }
 
-            const allCards = Array.from(businessCardsContainer.querySelectorAll('.card'));
+    //         const allCards = Array.from(businessCardsContainer.querySelectorAll('.card'));
 
-            function applyFilter() {
-                const filter = ratingFilter.value;
-                let filteredCards = [...allCards];
+    //         function applyFilter() {
+    //             const filter = ratingFilter.value;
+    //             let filteredCards = [...allCards];
 
-                if (filter !== 'all') {
-                    filteredCards.sort((a, b) => {
-                        const ratingA = parseFloat(a.getAttribute('data-rating')) || 0;
-                        const ratingB = parseFloat(b.getAttribute('data-rating')) || 0;
-                        return filter === 'asc' ? ratingA - ratingB : ratingB - ratingA;
-                    });
-                }
+    //             if (filter !== 'all') {
+    //                 filteredCards.sort((a, b) => {
+    //                     const ratingA = parseFloat(a.getAttribute('data-rating')) || 0;
+    //                     const ratingB = parseFloat(b.getAttribute('data-rating')) || 0;
+    //                     return filter === 'asc' ? ratingA - ratingB : ratingB - ratingA;
+    //                 });
+    //             }
 
-                // Clear container
-                businessCardsContainer.innerHTML = '';
-                // Append sorted cards
-                filteredCards.forEach(card => businessCardsContainer.appendChild(card));
+    //             // Clear container
+    //             businessCardsContainer.innerHTML = '';
+    //             // Append sorted cards
+    //             filteredCards.forEach(card => businessCardsContainer.appendChild(card));
 
-                // Handle no results (if noResults element exists)
-                if (noResults) {
-                    noResults.classList.toggle('d-none', filteredCards.length > 0);
-                }
-            }
+    //             // Handle no results (if noResults element exists)
+    //             if (noResults) {
+    //                 noResults.classList.toggle('d-none', filteredCards.length > 0);
+    //             }
+    //         }
 
-            // Attach event listener
-            ratingFilter.addEventListener('change', applyFilter);
-            // Initial filter application
-            applyFilter();
-        }
+    //         // Attach event listener
+    //         ratingFilter.addEventListener('change', applyFilter);
+    //         // Initial filter application
+    //         applyFilter();
+    //     }
 
-        setupCategoryFilter();
-    });
+    //     setupCategoryFilter();
+    // });
 
     // Rating and Review System
     // (function () {
