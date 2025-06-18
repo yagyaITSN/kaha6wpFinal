@@ -976,6 +976,8 @@ img.gallery-preview {
 
 .single_page_hero-logo {
     background-color: var(--cl--secondary);
+    height: 150px;
+    display: flex;
 }
 
 .single_page_hero-section-slider {

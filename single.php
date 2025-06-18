@@ -219,7 +219,7 @@ $views = get_post_meta(get_the_ID(), 'post_views_count', true);
       $image_url = $image ? esc_url($image[0]) : 'https://kaha6.com/wp-content/uploads/kaha6-no-image.png';
       ?>
       <img src="<?php echo $image_url; ?>" alt="<?php echo esc_attr(get_the_title()); ?>"
-        class="img-fluid rounded-4" width="150">
+        class="img-fluid rounded-4 object-fit-cover" width="150">
     </div>
   </div>
 </section>
