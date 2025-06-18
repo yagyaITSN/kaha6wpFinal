@@ -687,61 +687,6 @@
     //     }
     // })();
 
-    // Login/Register functionality
-    function setupAuthForms() {
-        // Toggle password visibility
-        function setupPasswordToggle(iconId, inputId) {
-            const icon = document.getElementById(iconId);
-            const input = document.getElementById(inputId);
-
-            if (!icon || !input) return;
-
-            icon.addEventListener('click', function () {
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                }
-            });
-        }
-
-        // Initialize password toggles
-        setupPasswordToggle('toggleLoginPassword', 'loginPassword');
-        setupPasswordToggle('toggleRegisterPassword', 'registerPassword');
-        setupPasswordToggle('toggleRegisterPasswordConfirm', 'registerPasswordConfirm');
-
-        // Switch to login tab from register link
-        const switchToLogin = document.getElementById('switchToLogin');
-        if (switchToLogin) {
-            switchToLogin.addEventListener('click', function (e) {
-                e.preventDefault();
-                const loginTab = new bootstrap.Tab(document.getElementById('login-tab'));
-                loginTab.show();
-            });
-        }
-
-        // Form submission
-        const loginForm = document.getElementById('loginForm');
-        if (loginForm) {
-            loginForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                console.log('Login submitted');
-            });
-        }
-
-        const registerForm = document.getElementById('registerForm');
-        if (registerForm) {
-            registerForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                console.log('Register submitted');
-            });
-        }
-    }
-
     // Home Page Popup
     function setupHomePopup() {
         const homepageModalEl = document.getElementById('homepageModal');
@@ -756,8 +701,66 @@
         setupMobileMenu();
         initializeSliders();
         setupCategoryFilter();
-        setupAuthForms();
         setupHomePopup();
     });
 
 })();
+
+function setupAuthForms() {
+    // Toggle password visibility
+    function setupPasswordToggle(iconId, inputId) {
+        const icon = document.getElementById(iconId);
+        const input = document.getElementById(inputId);
+
+        if (!icon || !input) return;
+
+        icon.addEventListener('click', function () {
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            }
+        });
+    }
+
+    // Initialize password toggles
+    setupPasswordToggle('toggleLoginPassword', 'pwd');
+    setupPasswordToggle('toggleRegisterPassword', 'password');
+    setupPasswordToggle('toggleRegisterPasswordConfirm', 'repeat_password');
+
+    // Switch to login tab from register link
+    const switchToLogin = document.getElementById('switchToLogin');
+    if (switchToLogin) {
+        switchToLogin.addEventListener('click', function (e) {
+            e.preventDefault();
+            const loginTabButton = document.getElementById('login-tab');
+            if (loginTabButton) {
+                const loginTab = new bootstrap.Tab(loginTabButton);
+                loginTab.show();
+
+                // Update URL without reload
+                const url = new URL(window.location.href);
+                url.searchParams.delete('action');
+                url.searchParams.delete('verify');
+                window.history.pushState({}, '', url);
+            }
+        });
+    }
+}
+setupAuthForms();
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Handle tab state based on URL parameters on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('action') === 'register' || urlParams.get('verify') === 'code') {
+        const registerTabButton = document.getElementById('register-tab');
+        if (registerTabButton) {
+            const registerTab = new bootstrap.Tab(registerTabButton);
+            registerTab.show();
+        }
+    }
+});

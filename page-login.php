@@ -6,7 +6,7 @@
 
 <!-- Login/Register Form Section -->
 <section class="container my-5">
-    <div class="row row-cols-1 row-cols-lg-3 justi">
+    <div class="row row-cols-1 row-cols-lg-3 justify-content-center">
         <div class="col d-none d-lg-block">
             <!-- Banner 1 -->
             <?php get_template_part('ads/login/lg/lg', 'ad-one'); ?>
@@ -14,9 +14,7 @@
 
             <!-- Banner 2 -->
             <?php get_template_part('ads/login/lg/lg', 'ad-two'); ?>
-
             <!-- End Banner 2 -->
-
         </div>
 
         <!-- Main Content -->
@@ -25,11 +23,11 @@
                 <!-- Tabs Navigation -->
                 <ul class="nav login-register-tabs" id="authTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="btn btn-custom-red active" id="login-tab" data-bs-toggle="tab"
+                        <button class="btn btn-custom-red <?php echo (!isset($_GET['action']) || $_GET['action'] !== 'register') && (!isset($_GET['verify']) || $_GET['verify'] !== 'code') ? 'active' : ''; ?>" id="login-tab" data-bs-toggle="tab"
                             data-bs-target="#login" type="button" role="tab">Login</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="btn btn-custom-red" id="register-tab" data-bs-toggle="tab" data-bs-target="#register"
+                        <button class="btn btn-custom-red <?php echo (isset($_GET['action']) && $_GET['action'] === 'register') || (isset($_GET['verify']) && $_GET['verify'] === 'code') ? 'active' : ''; ?>" id="register-tab" data-bs-toggle="tab" data-bs-target="#register"
                             type="button" role="tab">Register</button>
                     </li>
                 </ul>
@@ -37,7 +35,7 @@
                 <!-- Tabs Content -->
                 <div class="tab-content" id="authTabsContent">
                     <!-- Login Tab -->
-                    <div class="tab-pane fade show active login-register-content p-4" id="login" role="tabpanel">
+                    <div class="tab-pane fade <?php echo (!isset($_GET['action']) || $_GET['action'] !== 'register') && (!isset($_GET['verify']) || $_GET['verify'] !== 'code') ? 'show active' : ''; ?> login-register-content p-4" id="login" role="tabpanel">
                         <h2 class="fs-2 fw-bold text-center login-register-title my-5">Welcome Back</h2>
 
                         <?php if (isset($_GET['login'])) : ?>
@@ -64,13 +62,13 @@
                             <div class="mb-3">
                                 <label for="loginUsername" class="form-label">Username/Email:</label>
                                 <input type="text" class="form-control" name="log" id="loginUsername" value="<?php echo isset($_GET['user']) ? esc_attr($_GET['user']) : ''; ?>"
-                                    placeholder="Enter your username or email" required autofocus included>
+                                    placeholder="Enter your username or email" required autofocus>
                             </div>
 
                             <div class="mb-3 password-toggle">
                                 <label for="pwd" class="form-label">Password:</label>
                                 <input type="password" name="pwd" class="form-control" id="pwd"
-                                    placeholder="Enter your password" included>
+                                    placeholder="Enter your password">
                                 <i class="bi bi-eye-slash password-toggle-icon" id="toggleLoginPassword"></i>
                             </div>
 
@@ -85,19 +83,18 @@
                                 <a href="<?php echo esc_url(wp_lostpassword_url()); ?>" class="text-decoration-none">Lost Your Password?</a>
                             </div>
                             <input type="hidden" name="redirect_to" value="<?php echo esc_url(home_url()); ?>">
-
                         </form>
                     </div>
 
                     <!-- Register Tab -->
-                    <div class="tab-pane fade login-register-content p-4" id="register" role="tabpanel">
+                    <div class="tab-pane fade <?php echo (isset($_GET['action']) && $_GET['action'] === 'register') || (isset($_GET['verify']) && $_GET['verify'] === 'code') ? 'show active' : ''; ?> login-register-content p-4" id="register" role="tabpanel">
                         <h2 class="fs-2 fw-bold text-center login-register-title my-5">Create Account</h2>
                         <?php
                         // Check if we are in the verification step
                         if (isset($_GET['verify']) && $_GET['verify'] === 'code' && isset($_SESSION['registration_data'])) {
                             // Verification Form
                         ?>
-                            <form method="POST" action="">
+                            <form method="POST" action="<?php echo esc_url(add_query_arg(array('action' => 'register', 'verify' => 'code'))); ?>">
                                 <?php
                                 if (isset($GLOBALS['verification_errors']) && !empty($GLOBALS['verification_errors'])) {
                                     foreach ($GLOBALS['verification_errors'] as $error) {
@@ -125,18 +122,16 @@
                             // Separate form for Resend Code, shown only when code has expired
                             if (isset($GLOBALS['verification_errors']) && in_array('Verification code has expired. Please resend the code.', $GLOBALS['verification_errors'])) {
                             ?>
-                                <form method="POST" action="">
+                                <form method="POST" action="<?php echo esc_url(add_query_arg(array('action' => 'register', 'verify' => 'code'))); ?>">
                                     <?php wp_nonce_field('verify_code_nonce', 'verify_code_nonce'); ?>
                                     <button type="submit" name="resend_code" id="resend_button" class="btn btn-custom-red">Resend Code</button>
                                 </form>
                             <?php
                             }
-                            ?>
-                        <?php
                         } else {
                             // Registration Form
-                        ?>
-                            <form id="registerForm" method="POST" action="">
+                            ?>
+                            <form id="registerForm" method="POST" action="<?php echo esc_url(add_query_arg(array('action' => 'register'))); ?>">
                                 <?php
                                 if (isset($GLOBALS['registration_errors']) && !empty($GLOBALS['registration_errors'])) {
                                     foreach ($GLOBALS['registration_errors'] as $error) {
@@ -149,26 +144,26 @@
                                 <div class="mb-3">
                                     <label for="uname" class="form-label">Username:</label>
                                     <input type="text" class="form-control" id="uname" name="uname" value="<?php echo isset($_POST['uname']) ? esc_attr($_POST['uname']) : ''; ?>" placeholder="Enter username"
-                                        required autofocus included>
+                                        required autofocus>
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email:</label>
                                     <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($_POST['email']) ? esc_attr($_POST['email']) : ''; ?>" placeholder="Enter your email"
-                                        required included>
+                                        required>
                                 </div>
 
                                 <div class="mb-3 password-toggle">
                                     <label for="password" class="form-label">Password:</label>
                                     <input type="password" class="form-control" id="password" name="password"
-                                        placeholder="Enter your password" required included>
+                                        placeholder="Enter your password" required>
                                     <i class="bi bi-eye-slash password-toggle-icon" id="toggleRegisterPassword"></i>
                                 </div>
 
                                 <div class="mb-3 password-toggle">
                                     <label for="repeat_password" class="form-label">Repeat Password:</label>
                                     <input type="password" class="form-control" id="repeat_password" name="repeat_password"
-                                        placeholder="Repeat your password" required included>
+                                        placeholder="Repeat your password" required>
                                     <i class="bi bi-eye-slash password-toggle-icon" id="toggleRegisterPasswordConfirm"></i>
                                 </div>
 
@@ -193,7 +188,6 @@
         <!-- End Main Content -->
 
         <div class="col d-none d-lg-block">
-
             <!-- Banner 3 -->
             <?php get_template_part('ads/login/lg/lg', 'ad-three'); ?>
             <!-- End Banner 3 -->
@@ -201,7 +195,6 @@
             <!-- Banner 4 -->
             <?php get_template_part('ads/login/lg/lg', 'ad-four'); ?>
             <!-- End Banner 4 -->
-
         </div>
     </div>
 </section>

@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.reply-comment-btn').forEach(button => {
     button.addEventListener('click', function (e) {
