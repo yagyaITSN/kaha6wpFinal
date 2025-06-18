@@ -10,7 +10,7 @@
                     <div>
                         <h4 class="fs-4 text-center text-dark mb-4 text-capitalize">Find trusted businesses near you
                             with ease.</h4>
-                        <?php get_template_part('parts/home/modal', 'form') ?>
+                        <?php //get_template_part('parts/home/modal', 'form') ?>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -18,7 +18,7 @@
                         <h5 class="fs-5 fw-bold text-center mb-4">Popular in Your Area</h5>
                         <div class="premium__section-slidder swiper mySwiper">
                             <div class="swiper-wrapper py-5">
-                                <?php get_template_part('parts/home/business', 'slider-two-core'); ?>
+                                <?php //get_template_part('parts/home/business', 'slider-two-core'); ?>
                             </div>
                             <div class="swiper-button-prev"></div>
                             <div class="swiper-button-next"></div>

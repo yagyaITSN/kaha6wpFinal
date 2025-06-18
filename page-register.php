@@ -456,7 +456,7 @@ $verification_status = get_post_meta($post_id, '_bcv_verification_status', true)
                         ?>
                     </div>
                     <button type="button" class="btn btn-custom-red add-more-btn" onclick="addContactField()" id="addPhoneBtn">
-                        <i class="bi bi-plus"></i> Add Another Phone Number
+                        <i class="bi bi-plus"></i> Add More Phone Number
                     </button>
 
                     <!-- Emails -->
@@ -633,7 +633,7 @@ $verification_status = get_post_meta($post_id, '_bcv_verification_status', true)
                         ?>
                     </div>
                     <button type="button" class="btn btn-custom-red add-more-btn" onclick="addServiceField()" id="addServiceBtn">
-                        <i class="bi bi-plus"></i> Add Another Service
+                        <i class="bi bi-plus"></i> Add More Service
                     </button>
                 </div>
             </div>
@@ -701,7 +701,7 @@ $verification_status = get_post_meta($post_id, '_bcv_verification_status', true)
                         ?>
                     </div>
                     <button type="button" class="btn btn-custom-red add-more-btn" onclick="addSocialField()" id="addSocialBtn">
-                        <i class="bi bi-plus"></i> Add Another Social Media
+                        <i class="bi bi-plus"></i> Add More Social Media
                     </button>
                 </div>
             </div>
@@ -757,7 +757,7 @@ $verification_status = get_post_meta($post_id, '_bcv_verification_status', true)
                         ?>
                     </div>
                     <button type="button" class="btn btn-custom-red add-more-btn" onclick="addGalleryField()" id="addGalleryBtn">
-                        <i class="bi bi-plus"></i> Add Another Image
+                        <i class="bi bi-plus"></i> Add More Image
                     </button>
                 </div>
             </div>
