@@ -471,9 +471,16 @@ add_action('init', function () {
             $transient_key = '2fa_code_' . md5($email);
             $stored_code = get_transient($transient_key);
 
+            // Static registration code value for testing
+            // if ($stored_code === false) {
+            //     $errors[] = 'Verification code has expired. Please resend the code.';
+            // } elseif ($stored_code !== $submitted_code && $submitted_code !== '000000') {
+            //     $errors[] = 'Invalid verification code.';
+            // }
+
             if ($stored_code === false) {
                 $errors[] = 'Verification code has expired. Please resend the code.';
-            } elseif ($stored_code !== $submitted_code && $submitted_code !== '000000') {
+            } elseif ($stored_code !== $submitted_code) {
                 $errors[] = 'Invalid verification code.';
             }
         }
