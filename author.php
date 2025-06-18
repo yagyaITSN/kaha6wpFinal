@@ -55,17 +55,17 @@ function mask_phone($phone)
   <div class="container">
     <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3">Author Added Businesses</h2>
     <div class="author-added-cards mt-5">
-
       <?php
       $author_id = get_query_var('author');
       $current_locations = wp_get_post_terms(get_the_ID(), 'ait-locations', array('fields' => 'slugs'));
       $current_items = wp_get_post_terms(get_the_ID(), 'ait-items', array('fields' => 'slugs'));
+      $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
       $args = array(
         'post_type' => 'ait-item',
         'author' => $author_id,
-        'posts_per_page' => 15,
-        'offset' => 0,
+        'posts_per_page' => 25,
+        'paged' => $paged,
         'post__not_in' => array(get_the_ID()),
       );
 
@@ -173,6 +173,47 @@ function mask_phone($phone)
       endif;
       ?>
     </div>
+
+    <!-- Pagination Start -->
+    <div class="row pt-5 justify-content-center">
+      <div class="col d-flex justify-content-center">
+        <nav aria-label="Page navigation">
+          <ul class="pagination mb-0">
+            <?php
+            $big = 999999999; // need an unlikely integer
+            $pagination_args = array(
+              'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+              'format' => '?paged=%#%',
+              'total' => $query->max_num_pages,
+              'current' => max(1, $paged),
+              'prev_text' => '«',
+              'next_text' => '»',
+              'type' => 'array',
+              'mid_size' => 1,
+              'end_size' => 1,
+            );
+
+            $paginate_links = paginate_links($pagination_args);
+            if ($paginate_links) {
+              foreach ($paginate_links as $link) {
+                $is_current = strpos($link, 'current') !== false ? ' active' : '';
+                preg_match('/href=["\'](.*?)["\']/i', $link, $href);
+                preg_match('/>(.*?)</', $link, $text);
+                $href = isset($href[1]) ? $href[1] : '#';
+                $text = isset($text[1]) ? $text[1] : '';
+                if ($text === '…') {
+                  $text = '...';
+                }
+                echo '<li class="page-item' . $is_current . '"><a class="page-link" href="' . esc_url($href) . '">' . esc_html($text) . '</a></li>';
+              }
+            }
+            ?>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- Pagination End -->
+
   </div>
 </section>
 <!-- End Author Added Businesses -->

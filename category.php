@@ -28,7 +28,7 @@
       $current_locations = wp_get_post_terms(get_the_ID(), 'ait-locations', array('fields' => 'slugs'));
       $current_items = wp_get_post_terms(get_the_ID(), 'ait-items', array('fields' => 'slugs'));
       $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-      $offset = ($paged - 1) * $posts_per_page;
+      // $offset = ($paged - 1) * $posts_per_page;
 
       $args = array(
         'post_type' => 'ait-item',
