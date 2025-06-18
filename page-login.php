@@ -195,11 +195,11 @@
         <div class="col d-none d-lg-block">
 
             <!-- Banner 3 -->
-            <?php get_template_part('ads/login/lg/lg ', 'ad-three'); ?>
+            <?php get_template_part('ads/login/lg/lg', 'ad-three'); ?>
             <!-- End Banner 3 -->
 
             <!-- Banner 4 -->
-            <?php get_template_part('ads/login/lg/lg ', 'ad-four'); ?>
+            <?php get_template_part('ads/login/lg/lg', 'ad-four'); ?>
             <!-- End Banner 4 -->
 
         </div>
