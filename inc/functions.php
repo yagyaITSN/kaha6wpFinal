@@ -1463,113 +1463,6 @@ add_action('wp_head', function () {
 <?php
 });
 
-// --------------------------------------------------------------------------
-// Ranting 
-// Restrict comment replies based on claim status
-// add_filter('comment_reply_link', function ($link, $args, $comment, $post) {
-//     if (get_post_type($post) !== 'ait-item') {
-//         return $link; // Only apply for ait-item post type
-//     }
-//     // Only allow replies to approved comments
-//     if ($comment->comment_approved != '1') {
-//         return '';
-//     }
-
-//     $claim_status = get_post_meta($post->ID, '_bcv_claim_status', true) ?: 'not_claimed';
-//     $can_reply = false;
-
-//     if ($claim_status === 'claimed') {
-//         $claimer_user_id = get_post_meta($post->ID, '_bcv_user_id', true);
-//         if ($claimer_user_id) {
-//             $can_reply = is_user_logged_in() && get_current_user_id() == absint($claimer_user_id);
-//         }
-//     }
-
-//     return $can_reply ? $link : '';
-// }, 10, 4);
-
-// // Prevent unauthorized users from posting replies
-// add_action('pre_comment_on_post', function ($comment_post_ID) {
-//     $post = get_post($comment_post_ID);
-
-//     if (!$post || get_post_type($post) !== 'ait-item') {
-//         return; // Only apply to ait-item post type
-//     }
-//     $comment_parent = isset($_POST['comment_parent']) ? absint($_POST['comment_parent']) : 0;
-
-//     // Check if user is admin or post owner
-//     $is_admin = current_user_can('administrator');
-//     $is_post_owner = false;
-//     if (is_user_logged_in()) {
-//         $post_author_id = get_post_field('post_author', $comment_post_ID);
-//         $is_post_owner = get_current_user_id() == $post_author_id;
-//     }
-
-//     // Handle reply restrictions based on claim status
-//     if ($comment_parent > 0) {
-//         $claim_status = get_post_meta($post->ID, '_bcv_claim_status', true) ?: 'not_claimed';
-//         $can_reply = false;
-
-//         if ($claim_status === 'claimed') {
-//             $claimer_user_id = get_post_meta($post->ID, '_bcv_user_id', true);
-//             if ($claimer_user_id) {
-//                 $can_reply = is_user_logged_in() && get_current_user_id() == absint($claimer_user_id);
-//             }
-//         }
-
-//         if (!$can_reply) {
-//             wp_die(
-//                 '<p>' . __('Replies are only allowed by the claiming user on a claimed post.', 'blankslate') . '</p>',
-//                 __('Permission Denied', 'blankslate'),
-//                 array('response' => 403, 'back_link' => true)
-//             );
-//         }
-//     }
-
-//     // Validate rating is provided, but skip for admins and post owners when replying
-//     $rating_required = !($is_admin || $is_post_owner);
-//     if ($rating_required || $comment_parent == 0) { // Require rating for top-level comments or non-privileged users
-//         if (!isset($_POST['pixrating']) || empty($_POST['pixrating'])) {
-//             wp_die(
-//                 '<p>' . __('A rating is required to submit a review.', 'blankslate') . '</p>',
-//                 __('Rating Required', 'blankslate'),
-//                 array('response' => 400, 'back_link' => true)
-//             );
-//         }
-
-//         $rating = absint($_POST['pixrating']);
-//         if ($rating < 1 || $rating > 5) {
-//             wp_die(
-//                 '<p>' . __('Invalid rating value.', 'blankslate') . '</p>',
-//                 __('Invalid Rating', 'blankslate'),
-//                 array('response' => 400, 'back_link' => true)
-//             );
-//         }
-//     }
-// });
-
-// // Save rating and optional title to comment meta after comment is posted
-// add_action('comment_post', function ($comment_id, $comment_approved, $commentdata) {
-//     $comment_post_id = $commentdata['comment_post_ID'];
-//     if (get_post_type($comment_post_id) !== 'ait-item') {
-//         return; // Only save rating for ait-item post type
-//     }
-//     if (isset($_POST['pixrating']) && !empty($_POST['pixrating'])) {
-//         $rating = absint($_POST['pixrating']);
-//         if ($rating >= 1 && $rating <= 5) {
-//             // Save the numeric rating
-//             update_comment_meta($comment_id, 'pixrating', $rating);
-
-//             // Save the optional rating title if provided
-//             $rating_title = isset($_POST['pixrating_title']) ? sanitize_text_field($_POST['pixrating_title']) : '';
-//             if (!empty($rating_title)) {
-//                 update_comment_meta($comment_id, 'pixrating_title', $rating_title);
-//             }
-//         }
-//     }
-// }, 10, 3);
-
-// --------------------------------------------------------------------------
 
 // Custom Columns in Admin Panel User Page
 add_filter('manage_users_columns', 'itsn_add_business_count_column');
@@ -1648,3 +1541,11 @@ function custom_author_pagination_rewrite()
     );
 }
 add_action('init', 'custom_author_pagination_rewrite');
+
+// Code for author page pagination
+function author_pg_pagination($query) {
+  if (!is_admin() && $query->is_main_query() && $query->is_author()) {
+    $query->set('post_type', array('post', 'ait-item'));
+  }
+}
+add_action('pre_get_posts', 'author_pg_pagination');

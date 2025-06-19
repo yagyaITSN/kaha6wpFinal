@@ -234,15 +234,6 @@ add_filter('single_template', function ($single_template) {
   return $single_template;
 });
 
-require get_template_directory() . '/inc/posttype.php';
-require get_template_directory() . '/inc/customfield.php';
-require_once 'inc/functions.php';
-require_once 'inc/mailfunc.php';
-require_once 'inc/custom-mail.php';
-require_once 'inc/ads.php';
-require_once 'inc/rating-mail.php';
-
-
 // Register the admin settings page
 function adrotate_custom_admin_menu()
 {
@@ -361,9 +352,6 @@ function render_adrotate_banners($ids)
   }
 }
 
-
-
-
 // Handle rating submission
 add_action('wp_ajax_submit_rating', 'handle_rating_submission');
 add_action('wp_ajax_nopriv_submit_rating', 'handle_rating_submission');
@@ -448,3 +436,11 @@ function handle_reply_submission()
     wp_send_json_error('Failed to submit reply');
   }
 }
+
+require get_template_directory() . '/inc/posttype.php';
+require get_template_directory() . '/inc/customfield.php';
+require_once 'inc/functions.php';
+require_once 'inc/mailfunc.php';
+require_once 'inc/custom-mail.php';
+require_once 'inc/ads.php';
+require_once 'inc/rating-mail.php';
