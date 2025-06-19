@@ -229,7 +229,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         setupMobileMenu();
         initializeSliders();
-        setupCategoryFilter();
     });
 
 })();
