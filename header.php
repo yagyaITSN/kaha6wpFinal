@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/common.css">
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/itsn.css?l=0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/common.css">
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/itsn.css?l=1">
   <?php wp_head(); ?>
 </head>
 
@@ -197,9 +197,9 @@
               </li>
 
               <!-- Register Button -->
-              <li class="nav-item">
-                <a href="<?php echo esc_url(home_url('/register-to-submit-your-company/')); ?>" class="btn btn-custom-red <?php echo is_page('register-to-submit-your-company') ? 'active-menu-item2' : ''; ?>">
-                  <i class="fas fa-plus me-1"></i>
+              <li class="nav-item" id="itsn_reg">
+                <a href="<?php echo esc_url(home_url('/register-to-submit-your-company')); ?>" class="btn btn-custom-red">
+                  Add Your Business
                 </a>
               </li>
             </ul>

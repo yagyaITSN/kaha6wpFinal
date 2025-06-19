@@ -3,30 +3,29 @@
 }
 
 .active-menu-item {
-  background-color: #f8f9fa !important;
+  background-color: #f8f9fa;
   color: var(--cl--primary) !important;
-  padding-left: 15px !important;
-  border-radius: 8px !important;
+  padding-left: 15px;
+  border-radius: 8px;
 }
 
 .active-menu-item2 {
-  background-color: #f8f9fa !important;
+  background-color: #f8f9fa;
   color: var(--cl--primary) !important;
-  border-radius: 8px !important;
+  border-radius: 8px;
 }
 
 .itsn-header-nav li:hover {
-  background-color: #f8f9fa !important;
-  transition-duration: 0.3s !important;
-  border-radius: 8px !important;
+  background-color: #f8f9fa;
+  transition-duration: 0.3s;
+  border-radius: 8px;
 }
 
 .itsn-header-nav li a:hover {
   color: var(--cl--primary) !important;
-  transition-duration: 0.3s !important;
-  border-radius: 8px !important;
+  transition-duration: 0.3s;
+  border-radius: 8px;
 }
-
 
 .select2-selection__placeholder {
   display: flex !important;

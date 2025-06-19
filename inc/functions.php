@@ -1634,3 +1634,15 @@ add_filter('template_include', function ($template) {
     }
     return $template;
 });
+
+
+// Author Page pagination
+function custom_author_pagination_rewrite()
+{
+    add_rewrite_rule(
+        'author/([^/]+)/page/?([0-9]{1,})/?$',
+        'index.php?author_name=$matches[1]&paged=$matches[2]',
+        'top'
+    );
+}
+add_action('init', 'custom_author_pagination_rewrite');

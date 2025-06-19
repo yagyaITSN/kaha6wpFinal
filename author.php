@@ -59,7 +59,6 @@ function mask_phone($phone)
       $author_id = get_query_var('author');
       $current_locations = wp_get_post_terms(get_the_ID(), 'ait-locations', array('fields' => 'slugs'));
       $current_items = wp_get_post_terms(get_the_ID(), 'ait-items', array('fields' => 'slugs'));
-      $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
       $args = array(
         'post_type' => 'ait-item',
