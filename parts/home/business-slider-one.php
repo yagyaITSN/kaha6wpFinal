@@ -1,7 +1,7 @@
 <section class="featured-section container py-5">
    <div class="d-flex justify-content-between align-items-center mb-4">
       <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3">Featured Businesses</h2>
-      <a href="./category_page.html" class="btn btn-custom-red">View All Businesses</a>
+      <a href="<?php echo home_url('/all-businesses'); ?>" class="btn btn-custom-red">View All Businesses</a>
    </div>
    <div class="featured-section-slider swiper mySwiper">
       <div class="swiper-wrapper py-5">
