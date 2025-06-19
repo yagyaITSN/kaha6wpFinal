@@ -373,13 +373,13 @@ $verification_status = get_post_meta($post_id, '_bcv_verification_status', true)
                         </div>
                         <div class="col-md-6 form-item">
                             <label for="_ait-item_item-data[map][latitude]" class="form-label mb-1">Latitude</label>
-                            <input type="number" class="form-control" name="_ait-item_item-data[map][latitude]" id="_ait-item_item-data[map][latitude]" placeholder="Enter latitude" value="<?php echo esc_attr($metadata['map']['latitude'] ?? ''); ?>">
+                            <input type="text" class="form-control" name="_ait-item_item-data[map][latitude]" id="_ait-item_item-data[map][latitude]" placeholder="Enter latitude" value="<?php echo esc_attr($metadata['map']['latitude'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 form-item">
                             <label for="_ait-item_item-data[map][longitude]" class="form-label mb-1">Longitude</label>
-                            <input type="number" class="form-control" id="_ait-item_item-data[map][longitude]" name="_ait-item_item-data[map][longitude]" placeholder="Enter longitude" value="<?php echo esc_attr($metadata['map']['longitude'] ?? ''); ?>">
+                            <input type="text" class="form-control" id="_ait-item_item-data[map][longitude]" name="_ait-item_item-data[map][longitude]" placeholder="Enter longitude" value="<?php echo esc_attr($metadata['map']['longitude'] ?? ''); ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -1208,18 +1208,6 @@ $verification_status = get_post_meta($post_id, '_bcv_verification_status', true)
 
         updateProgress();
     });
-
-    // Progress tracking
-    function updateProgress() {
-        const sections = document.querySelectorAll('.section');
-        const completedSections = Array.from(sections).filter(section => {
-            const inputs = section.querySelectorAll('input[required], select[required]');
-            return Array.from(inputs).every(input => input.value.trim() !== '');
-        }).length;
-
-        const progressPercentage = (completedSections / sections.length) * 100;
-        document.getElementById('formProgress').style.width = `${progressPercentage}%`;
-    }
 </script>
 
 <?php get_footer(); ?>

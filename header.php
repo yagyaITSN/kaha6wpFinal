@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/common.css">
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/common.css?l=0">
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/itsn.css?l=1">
   <?php wp_head(); ?>
 </head>
