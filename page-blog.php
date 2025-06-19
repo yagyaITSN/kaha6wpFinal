@@ -59,7 +59,7 @@
                 endwhile;
                 wp_reset_postdata();
             else :
-                echo '<h5 class="fs-5 fw-bold lh-lg text-center">Business not found<br/>Try another options</h5>';
+                echo '<h5 class="fs-5 fw-bold lh-lg text-center">Posts not found<br/>Try another options</h5>';
             endif;
             ?>
         </div>
@@ -161,7 +161,7 @@
                 endwhile;
                 wp_reset_postdata();
             else :
-                echo '<h5 class="fs-5 fw-bold lh-lg text-center">Business not found<br/>Try another options</h5>';
+                echo '<h5 class="fs-5 fw-bold lh-lg text-center">Posts not found<br/>Try another options</h5>';
             endif;
             ?>
         </div>

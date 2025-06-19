@@ -108,7 +108,7 @@
             endwhile;
             wp_reset_postdata();
          else :
-            echo '<p class="text-center lh-lg fs-6">No companies found.</p>';
+            echo '<p class="text-center lh-lg fs-6">No Businesses found.</p>';
          endif;
          ?>
       </div>
