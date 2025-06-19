@@ -7,48 +7,40 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 ?>
 
 <!-- Hero Section -->
-<section class="contact-header text-center py-5">
+<section class="contact-header py-5">
   <div class="container">
-    <h1 class="fs-1 fw-bold">
-      Search Results for
-      "<?php
-        echo esc_html($business_type);
-        if (!empty($location)) {
-          echo ', ' . esc_html($location);
-        }
-        ?>"
-    </h1>
-    <p class="lead text-muted fs-6">Find answers to common questions about Kaha6 Business Directory</p>
+    <h1 class="fs-1 fw-bold text-center">Nepal's Largest Business Directory</h1>
+    <p class="lead text-muted fs-6 mb-4 text-center">Find answers to common questions about Kaha6 Business Directory</p>
+    <div class="row px-lg-5">
+      <div class="col px-lg-5">
+        <?php get_template_part('parts/common/search', 'form'); ?>
+      </div>
+    </div>
   </div>
 </section>
-
 <!-- End Hero Section -->
 
-<!-- Banner  -->
-<?php get_template_part('ads/category/category', 'ad-one') ?>
-<!-- End Banner  -->
-
 <!-- Category Cards -->
-<section class="category-section py-5">
+<section class="category-section pb-5">
   <div class="container">
     <div class="category-section-title d-flex align-items-center justify-content-between gap-3">
       <?php if (!empty($keyword)) : ?>
         <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 m-0">Search Results for "<?php echo esc_html($keyword); ?>"</h2>
       <?php elseif (!empty($business_type) || !empty($location)) : ?>
-        <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 m-0">Filtered Businesses</h2>
+        <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 m-0">Search Results for <span class="text-custom-red">"<?php echo $business_type ?>"</span> and <span class="text-custom-red">"<?php echo $location; ?>"</span></h2>
       <?php else : ?>
         <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 m-0">All Businesses</h2>
       <?php endif; ?>
+
       <!-- Filter -->
-      <div class="category_filter">
-        <select id="ratingFilter">
-          <option value="all">All Ratings</option>
-          <option value="asc">Low to High</option>
-          <option value="desc">High to Low</option>
-        </select>
-      </div>
+      <?php get_template_part('parts/common/rating', 'filter'); ?>
+
     </div>
-    <?php /* <div class="category-cards mt-5" id="businessCards"> */ ?>
+
+    <!-- Banner  -->
+    <?php get_template_part('ads/category/category', 'ad-one') ?>
+    <!-- End Banner  -->
+
     <div class="category-cards mt-5">
       <?php
       $args = array(
@@ -87,21 +79,14 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
           $address = isset($meta['map']['address']) ? $meta['map']['address'] : '';
           $content = get_the_content();
 
-          // Calculate rating for the current post
-          $post_id = get_the_ID();
-          $comment_args = array(
-            'post_id' => $post_id,
-            'status'  => 'approve',
-          );
-          $comments = get_comments($comment_args);
-          $ratings = array();
-          foreach ($comments as $comment) {
-            $rating = get_comment_meta($comment->comment_ID, 'pixrating', true);
-            if ($rating) {
-              $ratings[] = floatval($rating);
-            }
-          }
-          $average_rating = !empty($ratings) ? array_sum($ratings) / count($ratings) : 0;
+          // Get average rating for this post
+          global $wpdb;
+          $table_name = $wpdb->prefix . 'rating_review';
+          $rating = $wpdb->get_var($wpdb->prepare(
+            "SELECT AVG(rating) FROM $table_name WHERE company_id = %d AND parent_id = 0",
+            get_the_ID()
+          ));
+          $rating = $rating ? round($rating, 1) : 0;
 
           // Get terms for ait-locations taxonomy
           $location_terms = get_the_terms(get_the_ID(), 'ait-locations');
@@ -148,7 +133,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
           }
         ?>
           <div class="card position-relative shadow-sm border-0 text-decoration-none rounded-4 overflow-hidden"
-            data-rating="<?php echo esc_attr(number_format($average_rating, 1)); ?>">
+            data-rating="<?php echo esc_attr($rating); ?>">
             <img class="card-img-top pt-2" src="<?php echo esc_url($img); ?>"
               alt="<?php echo esc_attr(get_the_title()); ?>">
             <div class="card-body d-flex flex-column justify-content-between">
@@ -193,7 +178,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
     <div class="row pt-5 justify-content-center">
       <div class="col d-flex justify-content-center">
         <nav aria-label="Page navigation">
-          <ul class="pagination mb-0">
+          <ul class="pagination mb-0 card-pagination">
             <?php
             $pagination_args = array(
               'total' => $query->max_num_pages,
@@ -201,8 +186,8 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
               'prev_text' => '«',
               'next_text' => '»',
               'type' => 'array',
-              'mid_size' => 1, // Show 1 page before and after current page
-              'end_size' => 1, // Show 1 page at the start and end
+              'mid_size' => 0,
+              'end_size' => 0,
               'add_args' => array(
                 's' => $keyword,
                 'business-type' => $business_type,
@@ -212,7 +197,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
             $paginate_links = paginate_links($pagination_args);
             if ($paginate_links) {
               foreach ($paginate_links as $link) {
-                $is_current = strpos($link, 'current') !== false ? ' active' : '';
+                $is_current = strpos($link, 'current') !== false ? ' active_pgnation' : '';
                 preg_match('/href=["\'](.*?)["\']/i', $link, $href);
                 preg_match('/>(.*?)</', $link, $text);
                 $href = isset($href[1]) ? $href[1] : '#';
@@ -229,7 +214,7 @@ $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
       </div>
     </div>
     <!-- Pagination End -->
-     
+
   </div>
 </section>
 <!-- End Category Cards -->

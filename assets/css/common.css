@@ -333,13 +333,13 @@ footer li a:hover {
 .card-pagination {
     display: flex;
     justify-content: center;
-    margin-top: 30px;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.card-pagination div {
+.card-pagination li a {
     padding: 5px 12px;
+    color: var(--cl--primary);
     border: 1px solid #ddd;
     border-radius: 4px;
     cursor: pointer;
@@ -350,12 +350,25 @@ footer li a:hover {
     -o-transition: all 0.5s ease;
 }
 
-.card-pagination div:hover,
-.card-pagination div.active {
-    background-color: var(--cl--primary);
-    color: var(--cl--secondary);
+.card-pagination li a:hover,
+.active_pgnation a {
+    background-color: var(--cl--primary) !important;
+    color: var(--cl--secondary) !important;
     border-color: var(--cl--primary);
 }
+
+/* Pagination */
+/* .pagination .page-link {
+  color: #C1272D;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #C1272D;
+  color: white;
+  border: 1px solid #C1272D;
+} */
+
+/* Pagination end */
 
 .card-not-found {
     grid-column: 1 / -1;

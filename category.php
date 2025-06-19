@@ -15,13 +15,8 @@
       <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3 m-0"><?php single_term_title(); ?> Businesses</h2>
 
       <!-- Filter -->
-      <div class="category_filter">
-        <select id="ratingFilter">
-          <option value="all">All Ratings</option>
-          <option value="asc">Low to High</option>
-          <option value="desc">High to Low</option>
-        </select>
-      </div>
+      <?php get_template_part('parts/common/rating', 'filter'); ?>
+
     </div>
     <div class="category-cards mt-5">
       <?php
@@ -45,6 +40,15 @@
 
       if ($query->have_posts()) :
         while ($query->have_posts()) : $query->the_post();
+
+          // Get average rating for this post
+          global $wpdb;
+          $table_name = $wpdb->prefix . 'rating_review';
+          $rating = $wpdb->get_var($wpdb->prepare(
+            "SELECT AVG(rating) FROM $table_name WHERE company_id = %d AND parent_id = 0",
+            get_the_ID()
+          ));
+          $rating = $rating ? round($rating, 1) : 0;
 
           $image_id = get_post_thumbnail_id();
           $image_data = wp_get_attachment_image_src($image_id, 'custom_grid_img_size');
@@ -150,7 +154,7 @@
     <div class="row pt-5 justify-content-center">
       <div class="col d-flex justify-content-center">
         <nav aria-label="Page navigation">
-          <ul class="pagination mb-0">
+          <ul class="pagination mb-0 card-pagination">
             <?php
             $big = 999999999; // need an unlikely integer
             $pagination_args = array(
@@ -161,14 +165,14 @@
               'prev_text' => '«',
               'next_text' => '»',
               'type' => 'array',
-              'mid_size' => 1,
-              'end_size' => 1,
+              'mid_size' => 0,
+              'end_size' => 0,
             );
 
             $paginate_links = paginate_links($pagination_args);
             if ($paginate_links) {
               foreach ($paginate_links as $link) {
-                $is_current = strpos($link, 'current') !== false ? ' active' : '';
+                $is_current = strpos($link, 'current') !== false ? ' active_pgnation' : '';
                 preg_match('/href=["\'](.*?)["\']/i', $link, $href);
                 preg_match('/>(.*?)</', $link, $text);
                 $href = isset($href[1]) ? $href[1] : '#';

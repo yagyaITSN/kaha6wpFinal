@@ -67,7 +67,7 @@
         <div class="row pt-5 justify-content-center">
             <div class="col d-flex justify-content-center">
                 <nav aria-label="Page navigation">
-                    <ul class="pagination mb-0">
+                    <ul class="pagination mb-0 card-pagination">
                         <?php
                         $big = 999999999; // need an unlikely integer
                         $pagination_args = array(
@@ -78,14 +78,14 @@
                             'prev_text' => '«',
                             'next_text' => '»',
                             'type' => 'array',
-                            'mid_size' => 1,
-                            'end_size' => 1,
+                            'mid_size' => 0,
+                            'end_size' => 0,
                         );
 
                         $paginate_links = paginate_links($pagination_args);
                         if ($paginate_links) {
                             foreach ($paginate_links as $link) {
-                                $is_current = strpos($link, 'current') !== false ? ' active' : '';
+                                $is_current = strpos($link, 'current') !== false ? ' active_pgnation' : '';
                                 preg_match('/href=["\'](.*?)["\']/i', $link, $href);
                                 preg_match('/>(.*?)</', $link, $text);
                                 $href = isset($href[1]) ? $href[1] : '#';
