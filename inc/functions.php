@@ -9,6 +9,7 @@ function custom_register_reverification_status()
         'show_in_admin_all_list'    => true,
         'show_in_admin_status_list' => true,
         'label_count'               => _n_noop('Under Reverification <span class="count">(%s)</span>', 'Under Reverification <span class="count">(%s)</span>'),
+        'comment_status' => 'open'
     ));
 
     register_post_status('banned', array(
@@ -18,6 +19,7 @@ function custom_register_reverification_status()
         'show_in_admin_all_list'    => true,
         'show_in_admin_status_list' => true,
         'label_count'               => _n_noop('Locked <span class="count">(%s)</span>', 'Locked <span class="count">(%s)</span>'),
+        'comment_status' => 'open'
     ));
 }
 add_action('init', 'custom_register_reverification_status');

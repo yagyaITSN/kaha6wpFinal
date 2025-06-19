@@ -3,12 +3,12 @@
 $author = get_queried_object();
 $author_id = $author->ID;
 
-$user_phone = get_user_meta($author_id, 'phone', true);
-$user_notes = get_user_meta($author_id, 'notes', true);
-$user_twitter = get_user_meta($author_id, 'twitter', true);
-$user_facebook = get_user_meta($author_id, 'facebook', true);
-$user_linkedin = get_user_meta($author_id, 'linkedin', true);
-$user_instagram = get_user_meta($author_id, 'instagram', true);
+// $user_phone = get_user_meta($author_id, 'phone', true);
+// $user_notes = get_user_meta($author_id, 'notes', true);
+// $user_twitter = get_user_meta($author_id, 'twitter', true);
+// $user_facebook = get_user_meta($author_id, 'facebook', true);
+// $user_linkedin = get_user_meta($author_id, 'linkedin', true);
+// $user_instagram = get_user_meta($author_id, 'instagram', true);
 
 $profile_photo_id = get_user_meta($author_id, 'profile_photo', true);
 $profile_photo_url = $profile_photo_id ? wp_get_attachment_url($profile_photo_id) : get_template_directory_uri() . '/assets/images/profile.png';
@@ -19,13 +19,6 @@ function mask_email($email)
   $parts = explode('@', $email);
   $name = substr($parts[0], 0, 2) . str_repeat('*', max(0, strlen($parts[0]) - 2));
   return $name . '@' . $parts[1];
-}
-
-// Function to mask phone number
-function mask_phone($phone)
-{
-  $visible_digits = max(0, strlen($phone) - 8);
-  return substr($phone, 0, $visible_digits) . str_repeat('*', 8);
 }
 ?>
 
@@ -53,12 +46,13 @@ function mask_phone($phone)
 <!-- Author Added Businesses -->
 <section class="author-added-businesses py-5">
   <div class="container">
-    <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3">Author Added Businesses</h2>
+    <h2 class="fs-2 fw-bold border-start border-4 border-danger ps-3"><?php echo $author->display_name; ?>'s Added Businesses</h2>
     <div class="author-added-cards mt-5">
       <?php
       $author_id = get_query_var('author');
       $current_locations = wp_get_post_terms(get_the_ID(), 'ait-locations', array('fields' => 'slugs'));
       $current_items = wp_get_post_terms(get_the_ID(), 'ait-items', array('fields' => 'slugs'));
+      $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 
       $args = array(
         'post_type' => 'ait-item',

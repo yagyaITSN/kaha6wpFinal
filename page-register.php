@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'post_content' => $intro,
             'post_type' => 'ait-item',
             'post_author' => $current_user_id,
+            'comment_status' => 'open'
         ];
         $post_id = wp_insert_post($post_data, true);
 

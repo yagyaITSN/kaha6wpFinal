@@ -14,7 +14,7 @@ function custom_itsn_post()
         'menu_position' => 3,
         'menu_icon' => 'dashicons-analytics',
         'rewrite' => array('slug' => 'company'),
-        'supports' => array('thumbnail', 'editor', 'title', 'custom-fields', 'comments', 'revisions', 'author'),
+        'supports' => array('thumbnail', 'editor', 'title', 'custom-fields', 'comments', 'revisions', 'author', 'trackbacks', 'excerpt', 'page-attributes', 'post-formats'),
         'show_in_rest' => true, // Enable REST API for post type
         'show_ui' => true, // Ensure UI is enabled
         'show_in_menu' => true, // Ensure it appears in admin menu
