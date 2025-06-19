@@ -219,9 +219,9 @@ add_action('after_setup_theme', function () {
 
 // registration with 2FA
 add_action('init', function () {
-    if (!session_id()) {
-        session_start();
-    }
+    // if (!session_id()) {
+    //     session_start();
+    // }
 
     // Handle Registration Form Submission
     if (isset($_POST['custom_register'])) {
