@@ -148,7 +148,7 @@ $views = get_post_meta(get_the_ID(), 'post_views_count', true);
   <div class="single_page_hero-section-slider swiper mySwiper">
     <div class="swiper-wrapper">
       <?php
-      $fallback_image = 'https://kaha6.com/wp-content/uploads/kaha6-no-image.png';
+      $fallback_image = get_template_directory_uri() . '/assets/images/banner.jpg';
       $counter = 1;
       foreach ($gallery as $item) :
         $image_id = $item['image_id'] ?? 0;
