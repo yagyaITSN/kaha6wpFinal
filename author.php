@@ -3,12 +3,14 @@
 $author = get_queried_object();
 $author_id = $author->ID;
 
-// $user_phone = get_user_meta($author_id, 'phone', true);
 // $user_notes = get_user_meta($author_id, 'notes', true);
-// $user_twitter = get_user_meta($author_id, 'twitter', true);
-// $user_facebook = get_user_meta($author_id, 'facebook', true);
-// $user_linkedin = get_user_meta($author_id, 'linkedin', true);
-// $user_instagram = get_user_meta($author_id, 'instagram', true);
+$user_phone = get_user_meta($author_id, 'phone', true);
+$user_twitter = get_user_meta($author_id, 'twitter', true);
+$user_facebook = get_user_meta($author_id, 'facebook', true);
+$user_linkedin = get_user_meta($author_id, 'linkedin', true);
+$user_instagram = get_user_meta($author_id, 'instagram', true);
+$user_tiktok = get_user_meta($author_id, 'tiktok', true);
+$user_youtube = get_user_meta($author_id, 'youtube', true);
 
 $profile_photo_id = get_user_meta($author_id, 'profile_photo', true);
 $profile_photo_url = $profile_photo_id ? wp_get_attachment_url($profile_photo_id) : get_template_directory_uri() . '/assets/images/profile.png';
@@ -33,7 +35,50 @@ function mask_email($email)
         </div>
         <div class="author-details">
           <h5 class="fw-bold"><?php echo $author->display_name ?></h5>
-          <h4 class="m-0"><?php echo esc_html(mask_email($author->user_email)); ?></h4>
+          <?php if (!current_user_can('administrator')): ?>
+            <h4 class="m-0"><?php echo esc_html(mask_email($author->user_email)); ?></h4>
+          <?php else: ?>
+            <h4 class="m-0">Email: <a class="text-dark" href="mailto:<?php echo esc_html($author->user_email); ?>"><?php echo esc_html($author->user_email); ?></a></h4>
+            <h4 class="mt-2">Phone: <a class="text-dark" href="tel:<?php echo esc_html($user_phone); ?>"><?php echo esc_html($user_phone); ?></a></h4>
+            <div class="d-flex gap-3">
+              <?php if ($user_facebook): ?>
+                <a href="<?php echo $user_facebook; ?>?ref=kaha6.com" class="text-decoration-none" target="_blank">
+                  <i class="fa-brands fa-facebook-f fb-color-code d-inline"></i>
+                </a>
+              <?php endif; ?>
+
+              <?php if ($user_twitter): ?>
+                <a href="<?php echo $user_twitter; ?>?ref=kaha6.com" class="text-decoration-none" target="_blank">
+                  <i class="fa-brands fa-x-twitter x-color-code d-inline"></i>
+                </a>
+              <?php endif; ?>
+
+              <?php if ($user_instagram): ?>
+                <a href="<?php echo $user_instagram; ?>?ref=kaha6.com" class="text-decoration-none" target="_blank">
+                  <i class="fa-brands fa-instagram insta-color-code d-inline"></i>
+                </a>
+              <?php endif; ?>
+
+              <?php if ($user_tiktok): ?>
+                <a href="<?php echo $user_tiktok; ?>?ref=kaha6.com" class="text-decoration-none" target="_blank">
+                  <i class="fa-brands fa-tiktok tiktok-color-code d-inline"></i>
+                </a>
+              <?php endif; ?>
+
+              <?php if ($user_linkedin): ?>
+                <a href="<?php echo $user_linkedin; ?>?ref=kaha6.com" class="text-decoration-none" target="_blank">
+                  <i class="fa-brands fa-linkedin-in linkedin-color-code d-inline"></i>
+                </a>
+              <?php endif; ?>
+
+              <?php if ($user_youtube): ?>
+                <a href="<?php echo $user_youtube; ?>?ref=kaha6.com" class="text-decoration-none" target="_blank">
+                  <i class="fa-brands fa-youtube yt-color-code d-inline"></i>
+                </a>
+              <?php endif; ?>
+            </div>
+
+          <?php endif; ?>
         </div>
       </div>
       <!-- Banner  -->

@@ -13,6 +13,8 @@ $user_twitter = get_user_meta($user_id, 'twitter', true);
 $user_facebook = get_user_meta($user_id, 'facebook', true);
 $user_linkedin = get_user_meta($user_id, 'linkedin', true);
 $user_instagram = get_user_meta($user_id, 'instagram', true);
+$user_tiktok = get_user_meta($user_id, 'tiktok', true);
+$user_youtube = get_user_meta($user_id, 'youtube', true);
 
 // Handle profile update
 if (isset($_POST['update_profile'])) {
@@ -40,6 +42,8 @@ if (isset($_POST['update_profile'])) {
 	update_user_meta($user_id, 'facebook', esc_url_raw($_POST['facebook']));
 	update_user_meta($user_id, 'linkedin', esc_url_raw($_POST['linkedin']));
 	update_user_meta($user_id, 'instagram', esc_url_raw($_POST['instagram']));
+	update_user_meta($user_id, 'tiktok', esc_url_raw($_POST['tiktok']));
+	update_user_meta($user_id, 'youtube', esc_url_raw($_POST['youtube']));
 
 	// Handle profile photo upload
 	if (!empty($_FILES['profile_photo']['name'])) {
@@ -189,14 +193,24 @@ $profile_photo_url = $profile_photo_id ? wp_get_attachment_url($profile_photo_id
 										<span class="error-message" id="twitter_error"></span>
 									</div>
 									<div class="mb-3 col-sm-12 col-md-4">
+										<label for="instagram" class="form-label"><i class="text-primary fa-brands fa-instagram"></i> Instagram</label>
+										<input id="instagram" placeholder="Instagram Profile URL" type="url" name="instagram" value="<?php echo esc_url($user_instagram); ?>" class="form-control">
+										<span class="error-message" id="instagram_error"></span>
+									</div>
+									<div class="mb-3 col-sm-12 col-md-4">
+										<label for="tiktok" class="form-label"><i class="text-primary fa-brands fa-tiktok"></i> TikTok</label>
+										<input id="tiktok" placeholder="TikTok Profile URL" type="url" name="tiktok" value="<?php echo esc_url($user_tiktok); ?>" class="form-control">
+										<span class="error-message" id="tiktok_error"></span>
+									</div>
+									<div class="mb-3 col-sm-12 col-md-4">
 										<label for="linkedin" class="form-label"><i class="text-primary fa-brands fa-linkedin-in"></i> LinkedIn</label>
 										<input id="linkedin" placeholder="LinkedIn Profile URL" type="url" name="linkedin" value="<?php echo esc_url($user_linkedin); ?>" class="form-control">
 										<span class="error-message" id="linkedin_error"></span>
 									</div>
 									<div class="mb-3 col-sm-12 col-md-4">
-										<label for="instagram" class="form-label"><i class="text-primary fa-brands fa-instagram"></i> Instagram</label>
-										<input id="instagram" placeholder="Instagram Profile URL" type="url" name="instagram" value="<?php echo esc_url($user_instagram); ?>" class="form-control">
-										<span class="error-message" id="instagram_error"></span>
+										<label for="youtube" class="form-label"><i class="text-primary fa-brands fa-youtube"></i> YouTube</label>
+										<input id="youtube" placeholder="YouTube Profile URL" type="url" name="youtube" value="<?php echo esc_url($user_youtube); ?>" class="form-control">
+										<span class="error-message" id="youtube_error"></span>
 									</div>
 								</div>
 								<button type="submit" class="btn btn-primary bg-primary border-0" name="update_profile">Save Changes</button>
@@ -216,7 +230,6 @@ $profile_photo_url = $profile_photo_id ? wp_get_attachment_url($profile_photo_id
 										<label for="confirm_password" class="form-label">Confirm Password</label>
 										<input type="password" name="confirm_password" class="form-control" id="confirm_password">
 									</div>
-
 								</div>
 								<button type="submit" class="btn btn-primary bg-primary border-0" name="change_password">Change Password</button>
 							</form>
