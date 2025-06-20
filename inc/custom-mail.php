@@ -85,38 +85,38 @@ function kaha6_add_five_seconds_schedule($schedules)
 function devTools()
 {
     $current_user = wp_get_current_user();
-    echo '<pre>Current User Data: ';
-    print_r($current_user);
-    echo '</pre>';
+    //     echo '<pre>Current User Data: ';
+    //     print_r($current_user);
+    //     echo '</pre>';
 
     $name = $current_user->display_name;
     $message = '';
 
     // Fetch data for dropdowns before form rendering
     $users = get_users();
-    echo '<pre>All Users for Dropdown: ';
-    print_r($users);
-    echo '</pre>';
+    //     echo '<pre>All Users for Dropdown: ';
+    //     print_r($users);
+    //     echo '</pre>';
 
     $args = [
         'post_type' => 'ait-item',
         'posts_per_page' => -1,
         'post_status' => ['publish', 'draft', 'under_reverification'],
     ];
-    // $businesses = get_posts($args);
-    // echo '<pre>All Businesses for Dropdown: ';
+    //     $businesses = get_posts($args);
+    //     echo '<pre>All Businesses for Dropdown: ';
     // print_r($businesses);
-    // echo '</pre>';
+    //     echo '</pre>';
 
     $categories = get_hierarchical_terms('ait-items');
-    echo '<pre>Categories for Dropdown: ';
-    print_r($categories);
-    echo '</pre>';
+    //     echo '<pre>Categories for Dropdown: ';
+    //     print_r($categories);
+    //     echo '</pre>';
 
     $locations = get_hierarchical_terms('ait-locations');
-    echo '<pre>Locations for Dropdown: ';
-    print_r($locations);
-    echo '</pre>';
+    //     echo '<pre>Locations for Dropdown: ';
+    //     print_r($locations);
+    //     echo '</pre>';
 
     // Handle form submission
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['send_email']) && check_admin_referer('send_email_nonce')) {
@@ -180,7 +180,6 @@ function devTools()
                             </a>
                         </strong></p>
                         <div style="border-bottom: 1px solid #C1272D; width: 80%; margin: 20px auto;"></div>
-                        <p style="font-size: 12px;">Please do not reply to this email. <a href="#" style="text-decoration:none;">Unsubscribe</a></p>
                     </td>
                 </tr>
                 <tr>' . $mailFooter . '</tr>
@@ -487,11 +486,47 @@ function devTools()
                 <label for="post_ids" class="form-label"><strong>Select Businesses</strong></label>
                 <select class="form-control chosen-select" id="post_ids" name="post_ids[]" multiple>
                     <?php
-                    foreach ($businesses as $business) {
-                        echo '<option value="' . esc_attr($business->ID) . '">' . esc_html($business->post_title) . '</option>';
+                    // Optimized query for all businesses
+                    $business_args = [
+                        'post_type'      => 'ait-item',
+                        'posts_per_page' => -1,  // Get all posts
+                        'post_status'    => ['publish', 'draft', 'under_reverification'],
+                        'fields'         => 'ids', // Only get IDs to reduce memory usage
+                        'no_found_rows'  => true, // Skip counting total rows for performance
+                    ];
+
+                    $business_ids = get_posts($business_args);
+
+                    if (!empty($business_ids)) {
+                        // Process in chunks to avoid memory overload
+                        $chunks = array_chunk($business_ids, 200); // Process 200 at a time
+
+                        foreach ($chunks as $chunk) {
+                            // Get just the titles for this chunk
+                            global $post;
+                            $posts = get_posts([
+                                'post__in'       => $chunk,
+                                'post_type'      => 'ait-item',
+                                'posts_per_page' => -1,
+                                'orderby'        => 'title',
+                                'order'          => 'ASC',
+                                'fields'         => 'all' // Get full post objects
+                            ]);
+
+                            foreach ($posts as $post) {
+                                setup_postdata($post);
+                                echo '<option value="' . esc_attr($post->ID) . '">'
+                                    . esc_html(get_the_title())
+                                    . '</option>';
+                            }
+                            wp_reset_postdata();
+                        }
+                    } else {
+                        echo '<option value="">No businesses found</option>';
                     }
                     ?>
                 </select>
+                <small class="text-muted"><?php echo count($business_ids); ?> businesses loaded</small>
             </div>
             <div class="mb-3 recipient-option" id="category_businesses_option" style="display: none;">
                 <label for="category_ids" class="form-label"><strong>Select Categories</strong></label>
