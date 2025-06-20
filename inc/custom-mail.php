@@ -140,11 +140,34 @@ function devTools()
             .content { padding: 20px; }
             a { color: #C1272D; }
         ';
-        $mailFooter = $mailFooter ?: '
-            <td class="footer" style="text-align: center; padding: 10px; font-size: 12px; color: #777;">
-                <p>Kaha6 Nepali Business Directory © ' . date('Y') . '</p>
-            </td>
-        ';
+        $mailFooter = '
+            <td class="footer">
+                <div class="social-icons">
+                    <a href="' . esc_url(get_theme_mod('setting_site_details6', '#')) . '" target="_blank">
+                        <img src="' . esc_url(get_template_directory_uri() . '/assets/images/fb.png') . '" alt="Facebook" height="15">
+                    </a>
+                    <a href="' . esc_url(get_theme_mod('setting_site_details7', '#')) . '" target="_blank">
+                        <img src="' . esc_url(get_template_directory_uri() . '/assets/images/x.png') . '" alt="X" height="15">
+                    </a>
+                    <a href="' . esc_url(get_theme_mod('setting_site_details8', '#')) . '" target="_blank">
+                        <img src="' . esc_url(get_template_directory_uri() . '/assets/images/linkedin.png') . '" alt="LinkedIn" height="15">
+                    </a>
+                    <a href="' . esc_url(get_theme_mod('setting_site_details9', '#')) . '" target="_blank">
+                        <img src="' . esc_url(get_template_directory_uri() . '/assets/images/instagram.png') . '" alt="Instagram" height="15">
+                    </a>
+                </div>
+                <div class="footer-bottom">
+                    <p style="margin-bottom: 4px; font-size: 14px;">
+                        <img src="' . esc_url(get_template_directory_uri() . '/assets/images/pin.png') . '" alt="Location" height="12">
+                        ' . esc_html(get_theme_mod('setting_site_details3', 'Biratnagar, Munalpath')) . '
+                    </p>
+                    <a href="mailto:' . esc_attr(get_theme_mod('setting_site_details5', 'info@kaha6.com')) . '"
+                        style="text-decoration: none; text-align: center; color: #1a1a1a; font-size: 14px;">
+                        <img src="' . esc_url(get_template_directory_uri() . '/assets/images/envelope.png') . '" alt="Email" height="12">
+                        ' . esc_html(get_theme_mod('setting_site_details5', 'info@kaha6.com')) . '
+                    </a>
+                </div>
+            </td>';
 
         // Build email headers
         $headers = [
